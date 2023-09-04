@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Image, View } from "react-native";
 import CustomButton from '../components/Buttons/CustomButton';
 import BottomDesign from '../components/BottomDesign/BottomDesign'
 
 class HomeScreen extends Component {
-  goToSignUp = () => {
+  goToLogOut = () => {
     this.props.navigation.navigate('LogInScreen');
   };
 
@@ -14,7 +14,7 @@ class HomeScreen extends Component {
          <Image source={require('./../assets/images/home.jpg')} 
           style={styles.logo}
           />
-          <CustomButton logInButton label='LOG OUT' handlePress={goToLogOut}/>
+          <CustomButton logInButton label='LOG OUT' handlePress={this.goToLogOut}/>
           <View style={styles.bottom}>
           <BottomDesign />
         </View>

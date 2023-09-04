@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Text  } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 
 import CustomButton from '../components/Buttons/CustomButton';
 import BottomDesign from '../components/BottomDesign/BottomDesign';
 
 class WelcomeScreen extends Component {
-  // Define navigation methods using props
+  // navigation methods using props
   goToSignUp = () => {
+    console.log('SIGN UP Button clicked')
     this.props.navigation.navigate('SignUpScreen');
   };
 
   goToLogIn = () => {
+    console.log('LOG IN Button clicked')
     this.props.navigation.navigate('LogInScreen');
   };
 

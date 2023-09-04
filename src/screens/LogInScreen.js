@@ -6,10 +6,10 @@ import {
   View,
   StyleSheet,
   TextInput,
+  TouchableOpacity
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { useNavigation } from '@react-navigation/native';
 import CustomButton from '../components/Buttons/CustomButton';
 import BottomDesign from '../components/BottomDesign/BottomDesign';
 
@@ -21,11 +21,11 @@ class LogInScreen extends Component {
       password: '',
     };
   }
-
-  navigation = useNavigation();
-
+  newPassword = () => {
+    this.props.navigation.navigate('SetPasswordScreen');
+  };
   goToSignUp = () => {
-    this.navigation.navigate('SignUpScreen');
+    this.props.navigation.navigate('SignUpScreen');
   };
 
   handleLogin = async () => {
@@ -39,7 +39,7 @@ class LogInScreen extends Component {
 
     try {
       const userData = await AsyncStorage.getItem('userData');
-      this.navigation.navigate('HomeScreen');
+      this.props.navigation.navigate('HomeScreen');
       console.log('userData:', userData);
 
       // ...rest of the code...
@@ -85,20 +85,23 @@ class LogInScreen extends Component {
               />
             </View>
           </View>
-          <View style={styles.forgot}>
-            <Text style={styles.forgotText}>Forgot password?</Text>
-          </View>
+          <TouchableOpacity style={styles.forgot}>
+          <Text style={styles.forgotText} onPress={this.newPassword}>
+            Forgot password?
+          </Text>
+        </TouchableOpacity>
           <View style={styles.buttonView}>
             <CustomButton
               logInButton
               label="LOGIN"
-              handlePress={this.authenticateUser}
+              handlePress={() => this.handleLogin()}
             />
             <CustomButton
               signUpButton
               label="SIGN UP"
               handlePress={this.goToSignUp}
             />
+            
           </View>
           <View style={styles.bottom}>
             <BottomDesign />

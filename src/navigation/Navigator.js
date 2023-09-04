@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LogInScreen from '../screens/LogInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import DetailsScreen from '../screens/DetailsScreen';
+import SetPasswordScreen from '../screens/SetPasswordScreen';
 
 const Stack = createStackNavigator();
 
@@ -46,6 +47,13 @@ class Navigator extends Component {
              <Stack.Screen
               name="DetailsScreen"
               component={DetailsScreen}
+              options={{
+                title: '',
+              }}
+            />
+             <Stack.Screen
+              name="SetPasswordScreen"
+              component={SetPasswordScreen}
               options={{
                 title: '',
               }}
