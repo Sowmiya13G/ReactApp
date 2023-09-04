@@ -81,6 +81,7 @@ class SignUpScreen extends Component {
         console.log(userData);
         await AsyncStorage.setItem('userData', JSON.stringify(userData));
         // this.navigation.navigate('DetailsScreen');
+        console.log("clicked button")
         this.props.navigation.navigate('DetailsScreen');
 
         // Clear the form fields

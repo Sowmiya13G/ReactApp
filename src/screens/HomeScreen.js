@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import CustomButton from '../components/Buttons/CustomButton';
 import BottomDesign from '../components/BottomDesign/BottomDesign'
 

@@ -7,9 +7,10 @@ import {
   StyleSheet,
   TextInput,
 } from 'react-native';
+// import packages
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import { useNavigation } from '@react-navigation/native';
+// import screen components in navigation container
 import CustomButton from '../components/Buttons/CustomButton';
 import BottomDesign from '../components/BottomDesign/BottomDesign';
 
@@ -21,9 +22,8 @@ class LogInScreen extends Component {
       password: '',
     };
   }
-
+  
   navigation = useNavigation();
-
   goToSignUp = () => {
     this.navigation.navigate('SignUpScreen');
   };
@@ -42,7 +42,6 @@ class LogInScreen extends Component {
       this.navigation.navigate('HomeScreen');
       console.log('userData:', userData);
 
-      // ...rest of the code...
     } catch (error) {
       console.error('Error authenticating user: ', error);
     }
