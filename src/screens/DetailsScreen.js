@@ -25,83 +25,85 @@ class DetailsScreen extends Component {
     };
   }
 
-  // validateForm = () => {
-  //   const firstNameRegex = /^[A-Za-z]+$/;
-  //   if (!this.state.firstname.match(firstNameRegex)) {
-  //     this.setState({error: 'Username should consist only of alphabets'});
-  //     return false;
-  //   }
-  //   const lastNameRegex = /^[A-Za-z]+$/;
-  //   if (!this.state.lastName.match(firstNameRegex)) {
-  //     this.setState({error: 'Username should consist only of alphabets'});
-  //     return false;
-  //   }
+  handleUserDetails() {
+    // Fetch existing user data from AsyncStorage and set it in the state
+    this.fetchUserDetails();
+  }
 
-  //   // Validation for email (contains @gmail.com)
-  //   if (!this.state.email.toLowerCase().includes('@gmail.com')) {
-  //     this.setState({error: 'Email should contain @gmail.com'});
-  //     return false;
-  //   }
-
-  //   // Validation for mobile number (contains only numbers)
-  //   const mobileNumberRegex = /^[0-9]+$/;
-  //   if (!this.state.mobileNumber.match(mobileNumberRegex)) {
-  //     this.setState({error: 'Mobile number should contain numbers only'});
-  //     return false;
-  //   }
-
-  //   // Validation for password (8 characters, mixed with numbers and alphabets)
-  //   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-  //   if (!this.state.password.match(passwordRegex)) {
-  //     this.setState({
-  //       error: 'Password must be 8 characters with letters and numbers',
-  //     });
-  //     return false;
-  //   }
-
-  //   // Validation for password match
-  //   if (this.state.password !== this.state.confirmPassword) {
-  //     this.setState({error: 'Passwords do not match'});
-  //     return false;
-  //   }
-
-  //   return true;
-  // };
+  fetchUserDetails = async () => {
+    try {
+      const userDataJSON = await AsyncStorage.getItem('userData');
+      if (userDataJSON) {
+        const userData = JSON.parse(userDataJSON);
+        this.setState({
+          firstName: userData.firstName || '',
+          lastName: userData.lastName || '',
+          designation: userData.designation || '',
+          company: userData.company || '',
+          address: userData.address || '',
+          location: userData.location || '',
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  };
 
   handleSubmit = async () => {
     const {firstName, lastName, designation, company, address, location} =
       this.state;
-      const userData = {
-        firstName,
-        lastName,
-        designation,
-        company,
-        address,
-        location,
-      };
-      try {
-        // Save the user details to AsyncStorage
-        console.log(userData);
+    const userData = {
+      firstName,
+      lastName,
+      designation,
+      company,
+      address,
+      location,
+    };
+
+    try {
+      // Fetch the existing user data from AsyncStorage
+      const storedDetails = await AsyncStorage.getItem('userData');
+      if (storedDetails) {
+        // Parse the existing data
+        const existingData = JSON.parse(storedDetails);
+
+        // Merge the input data with the existing user data
+        const mergeUserData = {
+          ...existingData,
+          ...userData,
+        };
+
+        // Save the merged data back to AsyncStorage
+        await AsyncStorage.setItem('userData', JSON.stringify(mergeUserData));
+        console.log(mergeUserData);
+        console.log('User details merged and saved successfully.');
+      } else {
+        // If there is no existing user data, set the input data as the user data
         await AsyncStorage.setItem('userData', JSON.stringify(userData));
-        this.props.navigation.navigate('HomeScreen');
-
-        // Clear the form fields
-        this.setState({
-          firstName: '',
-          lastName: '',
-          designation: '',
-          company: '',
-          address: '',
-          location: '',
-        });
-
         console.log('User details saved successfully.');
-      } catch (error) {
-        console.error('Error saving user details:', error);
-      
+      }
+
+      // Clear the form fields
+      this.setState({
+        firstName: '',
+        lastName: '',
+        designation: '',
+        company: '',
+        address: '',
+        location: '',
+      });
+
+      // Navigate to the HomeScreen
+      this.props.navigation.navigate('HomeScreen');
+    } catch (error) {
+      console.error('Error saving user details:', error);
     }
   };
-
+  componentDidMount() {
+    // Fetch and display existing user details when the component mounts
+    this.handleUserDetails();
+  }
   render() {
     return (
       <SafeAreaView>
