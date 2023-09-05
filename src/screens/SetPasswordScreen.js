@@ -39,14 +39,14 @@ class SetPasswordScreen extends Component {
     return isValid;
   };
   handlePassword = async () => {
-    const { newPassword, username } = this.state;
+    const { newPassword, userName: userName } = this.state;
     // if (this.validateInputs()) {
       try {
         const userDataJSON = await AsyncStorage.getItem('userData');
         if (userDataJSON) {
           const userData = JSON.parse(userDataJSON);
           // Find the user by username
-          if (userData.userName === username) {
+          if (userData.userName === userName) {
             userData.password = newPassword;
             await AsyncStorage.setItem('userData', JSON.stringify(userData));
 
@@ -88,8 +88,8 @@ class SetPasswordScreen extends Component {
               style={styles.input}
               placeholder="Enter your username"
               placeholderTextColor="grey"
-              value={this.state.username}
-              onChangeText={(text) => this.setState({ username: text })}
+              value={this.state.userName}
+              onChangeText={(text) => this.setState({ userName: text })}
             />
             <Text style={styles.title}>NEW PASSWORD</Text>
             <TextInput

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   SafeAreaView,
   Image,
@@ -6,7 +6,7 @@ import {
   View,
   StyleSheet,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -27,29 +27,61 @@ class LogInScreen extends Component {
   goToSignUp = () => {
     this.props.navigation.navigate('SignUpScreen');
   };
+  // Add this function to your LoginScreen component
+  findUser = async (email, userName) => {
+    try {
+      const existingData = await AsyncStorage.getItem('userData');
+      if (existingData) {
+        const users = JSON.parse(existingData);
+        const foundUser = users.find(
+          user => user.email === email && user.userName === userName,
+        );
 
-  handleLogin = async () => {
-    await this.authenticateUser();
+        if (foundUser) {
+          // User found, handle login logic here
+          // You can navigate to the next screen or perform any other actions
+          console.log('User found:', foundUser);
+        } else {
+          // User not found, handle error or display a message
+          console.log('User not found');
+        }
+      } else {
+        // No user data in AsyncStorage, handle error or display a message
+        console.log('No user data found');
+      }
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
   };
 
-  authenticateUser = async () => {
-    console.log('Entering authenticateUser function');
-    console.log('userName:', this.state.userName);
-    console.log('password:', this.state.password);
+  handleLogin = async () => {
+    const {userName, password} = this.state;
 
     try {
-      const userData = await AsyncStorage.getItem('userData');
-      this.props.navigation.navigate('HomeScreen');
-      console.log('userData:', userData);
+      const userDetailsJSON = await AsyncStorage.getItem('userData');
+      if (userDetailsJSON) {
+        const storedUserDetails = JSON.parse(userDetailsJSON);
 
-      // ...rest of the code...
+        if (
+          storedUserDetails.userName === userName &&
+          storedUserDetails.password === password
+        ) {
+          this.props.navigation.navigate('HomeScreen');
+        } else {
+          console.error(
+            'Authentication failed. Incorrect username or password.',
+          );
+        }
+      } else {
+        console.error('User details not found.');
+      }
     } catch (error) {
-      console.error('Error authenticating user: ', error);
+      console.error('Error retrieving user details:', error);
     }
   };
 
   render() {
-    const { userName, password } = this.state;
+    const {userName, password} = this.state;
 
     return (
       <SafeAreaView>
@@ -68,7 +100,7 @@ class LogInScreen extends Component {
               placeholder="Enter your username"
               placeholderTextColor="grey"
               value={userName}
-              onChangeText={(text) => this.setState({ userName: text })}
+              onChangeText={text => this.setState({userName: text})}
             />
             <Text style={styles.title}>Password</Text>
             <View style={styles.password}>
@@ -77,7 +109,8 @@ class LogInScreen extends Component {
                 placeholder="Enter your password"
                 placeholderTextColor="grey"
                 value={password}
-                onChangeText={(text) => this.setState({ password: text })}
+                onChangeText={text => this.setState({password: text})}
+                secureTextEntry={true}
               />
               <Image
                 style={styles.icon}
@@ -86,22 +119,21 @@ class LogInScreen extends Component {
             </View>
           </View>
           <TouchableOpacity style={styles.forgot}>
-          <Text style={styles.forgotText} onPress={this.newPassword}>
-            Forgot password?
-          </Text>
-        </TouchableOpacity>
+            <Text style={styles.forgotText} onPress={this.newPassword}>
+              Forgot password?
+            </Text>
+          </TouchableOpacity>
           <View style={styles.buttonView}>
             <CustomButton
               logInButton
               label="LOGIN"
-              handlePress={() => this.handleLogin()}
+              handlePress={() => this.findUser()}
             />
             <CustomButton
               signUpButton
               label="SIGN UP"
               handlePress={this.goToSignUp}
             />
-            
           </View>
           <View style={styles.bottom}>
             <BottomDesign />

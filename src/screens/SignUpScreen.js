@@ -7,7 +7,7 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
-  Alert
+  Alert,
 } from 'react-native';
 // import packages
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,81 +24,108 @@ class SignUpScreen extends Component {
       mobileNumber: '',
       password: '',
       confirmPassword: '',
-      error: '',
+      errors: {
+        email: '',
+        userName: '',
+        mobileNumber: '',
+        password: '',
+        confirmPassword: '',
+      },
     };
   }
 
-  // validateForm = () => {
-  //   // Validation for username (only alphabets)
-  //   const userNameRegex = /^[A-Za-z]+$/;
-  //   if (!userName.match(userNameRegex)) {
-  //     this.setState({ error: 'Username should consist only of alphabets' });
-  //     return false;
-  //   }
+  validateForm = () => {
+    const {email, userName, mobileNumber, password, confirmPassword} =
+      this.state;
+    const errors = {
+      email: '',
+      userName: '',
+      mobileNumber: '',
+      password: '',
+      confirmPassword: '',
+    };
 
-  //   // Validation for email (contains @gmail.com)
-  //   if (!email.toLowerCase().includes('@gmail.com')) {
-  //     this.setState({ error: 'Email should contain @gmail.com' });
-  //     return false;
-  //   }
+    // Validation for email
+    if (!email.toLowerCase().includes('@gmail.com')) {
+      errors.email = 'Email should contain @gmail.com';
+    }
 
-  //   // Validation for mobile number (contains only numbers)
-  //   const mobileNumberRegex = /^[0-9]+$/;
-  //   if (!mobileNumber.match(mobileNumberRegex)) {
-  //     this.setState({ error: 'Mobile number should contain numbers only' });
-  //     return false;
-  //   }
+    // Validation for username
+    const userNameRegex = /^[a-zA-Z0-9]*$/;
+    if (!userName.match(userNameRegex)) {
+      errors.userName = 'Username should consist only of alphabets';
+    }
 
-  //   // Validation for password (8 characters, mixed with numbers and alphabets)
-  //   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-  //   if (!password.match(passwordRegex)) {
-  //     this.setState({
-  //       error: 'Password must be 8 characters with letters and numbers',
-  //     });
-  //     return false;
-  //   }
+    // Validation for mobile number
+    const mobileNumberRegex = /^[0-9]+$/;
+    if (!mobileNumber.match(mobileNumberRegex)) {
+      errors.mobileNumber = 'Mobile number should contain numbers only';
+    }
 
-  //   // Validation for password match
-  //   if (password !== confirmPassword) {
-  //     this.setState({ error: 'Passwords do not match' });
-  //     return false;
-  //   }
+    // Validation for password
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!password.match(passwordRegex)) {
+      errors.password =
+        'Password must be 8 characters with letters and numbers';
+    }
 
-  //   return true;
-  // };
-  
+    // Validation for password match
+    if (password !== confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match';
+    }
+
+    // Set the errors state
+    this.setState({errors});
+
+    // Check if there are any errors
+    return Object.values(errors).every(error => error === '');
+  };
+
   handleSignUp = async () => {
-    const { email, userName, mobileNumber, password, confirmPassword } = this.state;
-      // Create a user object with the details
-      const userData = {
-        email,
-        userName,
-        mobileNumber,
-        password,
-        confirmPassword
-      };
-  
-      try {
-        // Save the user details to AsyncStorage
-        await AsyncStorage.setItem('userData', JSON.stringify(userData));
-        console.log(userData)
-        Alert.alert('Sign up successful');
-        // Clear the form fields
-        this.setState({
+    const {email, userName, mobileNumber, password, confirmPassword} =
+      this.state;
+
+    // Create a user object with the details
+    const userData = {
+      email,
+      userName,
+      mobileNumber,
+      password,
+      confirmPassword,
+    };
+
+    try {
+      // Save the user details to AsyncStorage
+      await AsyncStorage.setItem('userData', JSON.stringify(userData));
+      console.log(userData);
+      Alert.alert('Sign up successful');
+
+      // Clear the form fields and errors
+      this.setState({
+        email: '',
+        userName: '',
+        mobileNumber: '',
+        password: '',
+        confirmPassword: '',
+        errors: {
           email: '',
           userName: '',
           mobileNumber: '',
           password: '',
           confirmPassword: '',
-          error: '', // Clear any previous error message
-        });
-        this.props.navigation.navigate('DetailsScreen');
-        console.log('User details saved successfully.');
-      } catch (error) {
-        console.error('Error saving user details:', error);
-      }
+        },
+      });
+
+      this.props.navigation.navigate('DetailsScreen');
+    } catch (error) {
+      console.error('Error saving user details:', error);
+    }
   };
+
   render() {
+    const {errors} = this.state;
+
     return (
       <SafeAreaView>
         <ScrollView>
@@ -119,6 +146,8 @@ class SignUpScreen extends Component {
                 value={this.state.email}
                 onChangeText={text => this.setState({email: text})}
               />
+              <Text style={styles.errorText}>{errors.email}</Text>
+
               <Text style={styles.title}>User Name</Text>
               <TextInput
                 style={styles.input}
@@ -127,6 +156,8 @@ class SignUpScreen extends Component {
                 value={this.state.userName}
                 onChangeText={text => this.setState({userName: text})}
               />
+              <Text style={styles.errorText}>{errors.userName}</Text>
+
               <Text style={styles.title}>Mobile Number</Text>
               <TextInput
                 style={styles.input}
@@ -135,6 +166,8 @@ class SignUpScreen extends Component {
                 value={this.state.mobileNumber}
                 onChangeText={text => this.setState({mobileNumber: text})}
               />
+              <Text style={styles.errorText}>{errors.mobileNumber}</Text>
+
               <Text style={styles.title}>Password</Text>
               <TextInput
                 style={styles.input}
@@ -142,21 +175,30 @@ class SignUpScreen extends Component {
                 placeholderTextColor="gray"
                 value={this.state.password}
                 onChangeText={text => this.setState({password: text})}
+                secureTextEntry={true}
               />
+              <Text style={styles.errorText}>{errors.password}</Text>
+
               <Text style={styles.title}>Confirm Password</Text>
               <TextInput
                 style={styles.input}
-                placeholder="confirm your password"
+                placeholder="Confirm your password"
                 placeholderTextColor="gray"
                 value={this.state.confirmPassword}
                 onChangeText={text => this.setState({confirmPassword: text})}
+                secureTextEntry={true}
               />
+              <Text style={styles.errorText}>{errors.confirmPassword}</Text>
             </View>
             <View style={styles.btnView}>
               <CustomButton
                 signUpButton
                 label="SIGN UP"
-                handlePress={() => {this.handleSignUp()}}
+                handlePress={() => {
+                  if (this.validateForm()) {
+                    this.handleSignUp();
+                  }
+                }}
               />
             </View>
             <View style={styles.bottom}>
@@ -248,9 +290,10 @@ const styles = StyleSheet.create({
     height: 100,
     position: 'absolute',
   },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+  },
 });
 
 export default SignUpScreen;
-
-
-
