@@ -31,6 +31,7 @@ class SignUpScreen extends Component {
         password: '',
         confirmPassword: '',
       },
+      usersData: [],
     };
   }
 
@@ -83,8 +84,14 @@ class SignUpScreen extends Component {
   };
 
   handleSignUp = async () => {
-    const {email, userName, mobileNumber, password, confirmPassword} =
-      this.state;
+    const {
+      email,
+      userName,
+      mobileNumber,
+      password,
+      confirmPassword,
+      usersData,
+    } = this.state;
 
     // Create a user object with the details
     const userData = {
@@ -96,11 +103,31 @@ class SignUpScreen extends Component {
     };
 
     try {
-      // Save the user details to AsyncStorage
-      await AsyncStorage.setItem('userData', JSON.stringify(userData));
-      console.log(userData);
-      Alert.alert('Sign up successful');
+      const userKey = email.toLowerCase();
 
+      const existingUsersData = await AsyncStorage.getItem('userData');
+      let updatedUsersData = [];
+
+      if (existingUsersData) {
+        updatedUsersData = JSON.parse(existingUsersData);
+      }
+
+      // Check if the user already exists based on the userKey (email)
+      const userExists = updatedUsersData.some(
+        user => user.email.toLowerCase() === userKey,
+      );
+
+      if (userExists) {
+        Alert.alert('User already exists');
+        return;
+      }
+
+      // Add the new user data to the array
+      updatedUsersData.push(userData);
+
+      // Save the updated user data to AsyncStorage
+      await AsyncStorage.setItem('userData', JSON.stringify(updatedUsersData));
+      Alert.alert('Sign up successful');
       // Clear the form fields and errors
       this.setState({
         email: '',
@@ -115,9 +142,16 @@ class SignUpScreen extends Component {
           password: '',
           confirmPassword: '',
         },
+        usersData: updatedUsersData, // Update the state with the new user data
       });
 
-      this.props.navigation.navigate('DetailsScreen');
+      console.log(userData);
+
+      this.props.navigation.navigate('DetailsScreen', {
+        username: this.state.userName,
+        email: this.state.email,
+        mobileNumber: this.state.mobileNumber,
+      });
     } catch (error) {
       console.error('Error saving user details:', error);
     }
@@ -297,3 +331,9 @@ const styles = StyleSheet.create({
 });
 
 export default SignUpScreen;
+
+// let updatedUsersData = usersData ? [...usersData, userData] : [userData];
+// // Save the updated user data to AsyncStorage
+// await AsyncStorage.setItem('userData', JSON.stringify(updatedUsersData));
+// Alert.alert('Sign up successful');
+// Fetch the existing users from AsyncStorage

@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+
 // import packages
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../components/Buttons/CustomButton';
@@ -19,6 +20,7 @@ class LogInScreen extends Component {
     this.state = {
       userName: '',
       password: '',
+      isAuthenticated: false,
     };
   }
   newPassword = () => {
@@ -27,45 +29,50 @@ class LogInScreen extends Component {
   goToSignUp = () => {
     this.props.navigation.navigate('SignUpScreen');
   };
-  // Add this function to your LoginScreen component
-  findUser = async (email, userName) => {
-    try {
-      const existingData = await AsyncStorage.getItem('userData');
-      if (existingData) {
-        const users = JSON.parse(existingData);
-        const foundUser = users.find(
-          user => user.email === email && user.userName === userName,
-        );
+  // handleLogin = async () => {
+  //   try {
+  //     // Retrieve the previously stored user data from AsyncStorage
+  //     const userDataJSON = await AsyncStorage.getItem('userData');
+  //     const userData = JSON.parse(userDataJSON);
 
-        if (foundUser) {
-          // User found, handle login logic here
-          // You can navigate to the next screen or perform any other actions
-          console.log('User found:', foundUser);
-        } else {
-          // User not found, handle error or display a message
-          console.log('User not found');
-        }
-      } else {
-        // No user data in AsyncStorage, handle error or display a message
-        console.log('No user data found');
-      }
-    } catch (error) {
-      console.error('Error fetching user details:', error);
-    }
-  };
+  //     // Check if the entered username and password match any user in the stored data
+  //     const {userName, password} = this.state;
+  //     const authenticatedUser = userData.find(
+  //       user => user.userName === userName && user.password === password,
+  //     );
+
+  //     if (authenticatedUser) {
+  //       this.setState({isAuthenticated: true});
+  //       this.props.navigation.navigate('HomeScreen', {
+  //         userName: authenticatedUser.userName,
+  //       });
+  //     } else {
+  //       alert('Authentication failed. Please check your credentials.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error during login:', error);
+  //   }
+  // };
 
   handleLogin = async () => {
     const {userName, password} = this.state;
 
     try {
-      const userDetailsJSON = await AsyncStorage.getItem('userData');
-      if (userDetailsJSON) {
-        const storedUserDetails = JSON.parse(userDetailsJSON);
+      const existingData = await AsyncStorage.getItem('userData');
+      if (existingData) {
+        const users = JSON.parse(existingData);
 
-        if (
-          storedUserDetails.userName === userName &&
-          storedUserDetails.password === password
-        ) {
+        // Use a loop or the find function to check for a matching user
+        let authenticatedUser = null;
+        for (const user of users) {
+          if (user.userName === userName && user.password === password) {
+            authenticatedUser = user;
+            break;
+          }
+        }
+
+        if (authenticatedUser) {
+          // Authentication successful
           this.props.navigation.navigate('HomeScreen');
         } else {
           console.error(
@@ -73,13 +80,12 @@ class LogInScreen extends Component {
           );
         }
       } else {
-        console.error('User details not found.');
+        console.error('User data not found.');
       }
     } catch (error) {
-      console.error('Error retrieving user details:', error);
+      console.error('Error fetching user data:', error);
     }
   };
-
   render() {
     const {userName, password} = this.state;
 
@@ -127,7 +133,7 @@ class LogInScreen extends Component {
             <CustomButton
               logInButton
               label="LOGIN"
-              handlePress={() => this.findUser()}
+              handlePress={() => this.handleLogin()}
             />
             <CustomButton
               signUpButton

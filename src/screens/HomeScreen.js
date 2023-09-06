@@ -2,27 +2,39 @@ import React, {Component} from 'react';
 import {StyleSheet, Image, View, TouchableOpacity, Text} from 'react-native';
 import CustomButton from '../components/Buttons/CustomButton';
 import BottomDesign from '../components/BottomDesign/BottomDesign';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      userDetails: null,
+      userDetails: [],
     };
   }
-
-  handleUser() {
+  componentDidMount() {
+    // Fetch user details from AsyncStorage
     this.fetchUserDetails();
   }
 
   fetchUserDetails = async () => {
     try {
-      const userDataJSON = await AsyncStorage.getItem('userData');
-      if (userDataJSON) {
-        const userData = JSON.parse(userDataJSON);
-        this.setState({userDetails: userData});
-        this.props.navigation.navigate('ProfileScreen');
+      const userDetails = await AsyncStorage.getItem('userDetails');
+
+      if (userDetails) {
+        const parsedUserDetails = JSON.parse(userDetails);
+
+        // Get the email parameter passed from DetailsScreen
+        const {route} = this.props;
+        const {params} = route;
+        const email = params ? params.email : null;
+
+        if (email) {
+          const currentUserDetails = parsedUserDetails.filter(
+            user => user.email === email,
+          );
+
+          this.setState({userDetails: currentUserDetails});
+        }
       }
     } catch (error) {
       console.error('Error fetching user details:', error);
@@ -34,9 +46,10 @@ class HomeScreen extends Component {
   };
 
   goToProfile = () => {
-    this.props.navigation.navigate('ProfileScreen');
+    this.props.navigation.navigate('ProfileScreen', {
+      userDetails: this.state.userDetails, // Pass user details
+    });
   };
-
   render() {
     const {userDetails} = this.state;
     return (
@@ -52,7 +65,7 @@ class HomeScreen extends Component {
         </View>
         <Text style={styles.title}>Hello User</Text>
         <Text style={styles.text}>
-          {userDetails ? userDetails.userName : ''}
+          {userDetails.length > 0 ? userDetails[0].userName : ''}
         </Text>
         <View style={styles.button}>
           <CustomButton
@@ -110,3 +123,32 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+
+// fetchUserDetails = async () => {
+//   try {
+//     const userDataJSON = await AsyncStorage.getItem('userData');
+//     if (userDataJSON) {
+//       const userData = JSON.parse(userDataJSON);
+//       this.setState({userDetails: userData});
+//     }
+//   } catch (error) {
+//     console.error('Error fetching user details:', error);
+//   }
+// };
+
+// componentDidMount() {
+//   // Fetch and display user data based on the userKey
+//   this.fetchUserData();
+// }
+
+// fetchUserData = async () => {
+//   try {
+//     const userDetails = await AsyncStorage.getItem('userDetails');
+
+//     if (userDetails) {
+//       this.setState({userDetails: JSON.parse(userDetails)});
+//     }
+//   } catch (error) {
+//     console.error('Error fetching user details:', error);
+//   }
+// };

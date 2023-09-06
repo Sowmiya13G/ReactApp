@@ -19,7 +19,7 @@ class Navigator extends Component {
     super(props);
 
     this.state = {
-      authenticated: true,
+      authenticated: false,
     };
   }
 

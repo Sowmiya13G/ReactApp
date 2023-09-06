@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../components/Buttons/CustomButton';
@@ -16,8 +17,9 @@ class DetailsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: '',
-      lastName: '',
+      username: '',
+      email: '',
+      mobileNumber: '',
       designation: '',
       company: '',
       address: '',
@@ -25,36 +27,33 @@ class DetailsScreen extends Component {
     };
   }
 
-  handleUserDetails() {
+  componentDidMount() {
     // Fetch existing user data from AsyncStorage and set it in the state
-    this.fetchUserDetails();
+    const {route} = this.props;
+    const {username, email, mobileNumber} = route.params;
+
+    this.setState({
+      username,
+      email,
+      mobileNumber,
+    });
   }
+  handleSaveDetails = async () => {
+    const {
+      username,
+      email,
+      mobileNumber,
+      designation,
+      company,
+      address,
+      location,
+    } = this.state;
 
-  fetchUserDetails = async () => {
-    try {
-      const userDataJSON = await AsyncStorage.getItem('userData');
-      if (userDataJSON) {
-        const userData = JSON.parse(userDataJSON);
-        this.setState({
-          firstName: userData.firstName || '',
-          lastName: userData.lastName || '',
-          designation: userData.designation || '',
-          company: userData.company || '',
-          address: userData.address || '',
-          location: userData.location || '',
-        });
-      }
-    } catch (error) {
-      console.error('Error fetching user details:', error);
-    }
-  };
-
-  handleSubmit = async () => {
-    const {firstName, lastName, designation, company, address, location} =
-      this.state;
-    const userData = {
-      firstName,
-      lastName,
+    // Create a user details object
+    const userDetails = {
+      username,
+      email,
+      mobileNumber,
       designation,
       company,
       address,
@@ -62,47 +61,54 @@ class DetailsScreen extends Component {
     };
 
     try {
-      // Fetch the existing user data from AsyncStorage
-      const storedDetails = await AsyncStorage.getItem('userData');
-      if (storedDetails) {
-        // Parse the existing data
-        const existingData = JSON.parse(storedDetails);
+      // Fetch existing user details from AsyncStorage
+      const existingUserDetails = await AsyncStorage.getItem('userDetails');
+      let updatedUserDetails = [];
 
-        // Merge the input data with the existing user data
-        const mergeUserData = {
-          ...existingData,
-          ...userData,
-        };
-
-        // Save the merged data back to AsyncStorage
-        await AsyncStorage.setItem('userData', JSON.stringify(mergeUserData));
-        console.log(mergeUserData);
-        console.log('User details merged and saved successfully.');
-      } else {
-        // If there is no existing user data, set the input data as the user data
-        await AsyncStorage.setItem('userData', JSON.stringify(userData));
-        console.log('User details saved successfully.');
+      if (existingUserDetails) {
+        updatedUserDetails = JSON.parse(existingUserDetails);
       }
+      await AsyncStorage.setItem(
+        'userDetails',
+        JSON.stringify(updatedUserDetails),
+      );
 
-      // Clear the form fields
+      // Merge the new user details with existing details
+      updatedUserDetails.push(userDetails);
+
+      // Save the updated user details back to AsyncStorage
+      await AsyncStorage.setItem(
+        'userDetails',
+        JSON.stringify(updatedUserDetails),
+      );
+
+      Alert.alert('Details saved successfully');
+      this.props.navigation.navigate('HomeScreen', {
+        email: this.state.email, // Pass the user's email
+      });
+
+      // Optionally, you can clear the form fields here
       this.setState({
-        firstName: '',
-        lastName: '',
         designation: '',
         company: '',
         address: '',
         location: '',
       });
-
-      // Navigate to the HomeScreen
-      this.props.navigation.navigate('HomeScreen');
     } catch (error) {
       console.error('Error saving user details:', error);
     }
   };
+
   componentDidMount() {
-    // Fetch and display existing user details when the component mounts
-    this.handleUserDetails();
+    // Fetch user details from the navigation params (passed from SignUpScreen)
+    const {route} = this.props;
+    const {username, email, mobileNumber} = route.params;
+
+    this.setState({
+      username,
+      email,
+      mobileNumber,
+    });
   }
   render() {
     return (
@@ -113,21 +119,31 @@ class DetailsScreen extends Component {
               <Text style={styles.header}>USER DETAILS</Text>
             </View>
             <View style={styles.details}>
-              <Text style={styles.title}>First name</Text>
+              <Text style={styles.title}>Email ID</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your name"
+                placeholder="Enter your email id"
                 placeholderTextColor="gray"
-                value={this.state.firstName}
-                onChangeText={text => this.setState({firstName: text})}
+                value={this.state.email}
+                onChangeText={text => this.setState({email: text})}
               />
-              <Text style={styles.title}>Last Name</Text>
+
+              <Text style={styles.title}>User Name</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Enter your user name"
                 placeholderTextColor="gray"
-                value={this.state.lastName}
-                onChangeText={text => this.setState({lastName: text})}
+                value={this.state.userName}
+                onChangeText={text => this.setState({userName: text})}
+              />
+
+              <Text style={styles.title}>Mobile Number</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your mobile number"
+                placeholderTextColor="gray"
+                value={this.state.mobileNumber}
+                onChangeText={text => this.setState({mobileNumber: text})}
               />
               <Text style={styles.title}>Designation</Text>
               <TextInput
@@ -171,7 +187,7 @@ class DetailsScreen extends Component {
                 <CustomButton
                   signUpButton
                   label="SUBMIT"
-                  handlePress={this.handleSubmit}
+                  handlePress={this.handleSaveDetails}
                 />
               </View>
             </View>
