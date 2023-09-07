@@ -16,7 +16,7 @@ class SetPasswordScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: '',
+      userName: this.props.route.params.userName,
       newPassword: '',
       confirmPassword: '',
       error: '',
@@ -133,7 +133,7 @@ class SetPasswordScreen extends Component {
             <CustomButton
               logInButton
               label="LOGIN"
-              handlePress={() => this.handlePassword()}
+              handlePress={() => this.handlePasswordUpdate()}
             />
           </View>
           <View style={styles.bottom}>

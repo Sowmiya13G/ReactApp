@@ -333,9 +333,3 @@ const styles = StyleSheet.create({
 });
 
 export default SignUpScreen;
-
-// let updatedUsersData = usersData ? [...usersData, userData] : [userData];
-// // Save the updated user data to AsyncStorage
-// await AsyncStorage.setItem('userData', JSON.stringify(updatedUsersData));
-// Alert.alert('Sign up successful');
-// Fetch the existing users from AsyncStorage

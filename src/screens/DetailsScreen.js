@@ -20,6 +20,8 @@ class DetailsScreen extends Component {
       userName: this.props.route.params.userName,
       email: this.props.route.params.email,
       mobileNumber: this.props.route.params.mobileNumber,
+      firstName: '',
+      lastName: '',
       designation: '',
       company: '',
       address: '',
@@ -58,7 +60,15 @@ class DetailsScreen extends Component {
   };
   handleSaveDetails = async () => {
     const {userName} = this.props.route.params;
-    const {newDetails, designation, company, address, location} = this.state;
+    const {
+      newDetails,
+      firstName,
+      lastName,
+      designation,
+      company,
+      address,
+      location,
+    } = this.state;
 
     try {
       // Fetch existing user details from AsyncStorage
@@ -75,6 +85,8 @@ class DetailsScreen extends Component {
           // Merge new details with existing details
           const updatedUser = {
             ...userData[userIndex],
+            firstName,
+            lastName,
             designation,
             company,
             address,
@@ -97,6 +109,8 @@ class DetailsScreen extends Component {
           this.setState({
             userDetails: updatedUser,
             newDetails: {},
+            firstName: '',
+            lastName: '',
             designation: '',
             company: '',
             address: '',
@@ -149,6 +163,22 @@ class DetailsScreen extends Component {
                 keyboardType="numeric"
                 value={mobileNumber}
                 onChangeText={text => this.setState({mobileNumber: text})}
+              />
+              <Text style={styles.title}>First Name</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your designation"
+                placeholderTextColor="gray"
+                value={this.state.firstName}
+                onChangeText={text => this.setState({firstName: text})}
+              />
+              <Text style={styles.title}>Last Name</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your designation"
+                placeholderTextColor="gray"
+                value={this.state.lastName}
+                onChangeText={text => this.setState({lastName: text})}
               />
               <Text style={styles.title}>Designation</Text>
               <TextInput

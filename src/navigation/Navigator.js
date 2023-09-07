@@ -20,6 +20,7 @@ class Navigator extends Component {
 
     this.state = {
       authenticated: false,
+      checkedAuthentication: false,
     };
   }
 
@@ -33,11 +34,11 @@ class Navigator extends Component {
       console.log('userDataJSON:', userDataJSON); // Debug: Log user data
 
       if (userDataJSON) {
-        // Parse the JSON string to an object
         const userData = JSON.parse(userDataJSON);
+        console.log('Parsed userData:', userData); // Debug: Log parsed user data
 
-        // Access the userName property from userData
         const userName = userData.userName;
+        console.log('userName:', userName); // Debug: Log userName
 
         if (userName) {
           // If userName exists, consider the user as authenticated
@@ -53,46 +54,18 @@ class Navigator extends Component {
         this.setState({authenticated: false});
         console.log('User is not authenticated');
       }
+      // Set checkedAuthentication to true to indicate that authentication check is complete
+      this.setState({checkedAuthentication: true});
     } catch (error) {
       console.error('Error checking authentication:', error);
     }
   };
 
-  // checkAuthentication = async () => {
-  //   try {
-  //     const userDataJSON = await AsyncStorage.getItem('userData');
-  //     console.log('userDataJSON:', userDataJSON); // Debug: Log user data
-
-  //     if (userDataJSON) {
-  //       // Parse the JSON string to an object
-  //       const userData = JSON.parse(userDataJSON);
-
-  //       // Access the email property from userData
-  //       const userEmail = userData.email;
-
-  //       if (userEmail != '') {
-  //         // If email exists, consider the user as authenticated
-  //         this.setState({authenticated: true});
-  //         console.log('User is authenticated with email:', userEmail);
-  //       } else {
-  //         // If email doesn't exist, the user is not authenticated
-  //         this.setState({authenticated: false});
-  //         console.log('User is not authenticated');
-  //       }
-  //     } else {
-  //       // If user details don't exist, the user is not authenticated
-  //       this.setState({authenticated: false});
-  //       console.log('User is not authenticated');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error checking authentication:', error);
-  //   }
-  // };
-
   render() {
-    const {authenticated} = this.state;
-    console.log(authenticated, 'gfgfg');
-
+    const {authenticated, checkedAuthentication} = this.state;
+    if (!checkedAuthentication) {
+      return null; // You can replace this with a loading component
+    }
     return (
       <NavigationContainer>
         <Stack.Navigator
@@ -155,3 +128,33 @@ class Navigator extends Component {
 export default Navigator;
 
 const styles = StyleSheet.create({});
+// checkAuthentication = async () => {
+//   try {
+//     const userDataJSON = await AsyncStorage.getItem('userData');
+//     console.log('userDataJSON:', userDataJSON); // Debug: Log user data
+
+//     if (userDataJSON) {
+//       // Parse the JSON string to an object
+//       const userData = JSON.parse(userDataJSON);
+
+//       // Access the email property from userData
+//       const userEmail = userData.email;
+
+//       if (userEmail != '') {
+//         // If email exists, consider the user as authenticated
+//         this.setState({authenticated: true});
+//         console.log('User is authenticated with email:', userEmail);
+//       } else {
+//         // If email doesn't exist, the user is not authenticated
+//         this.setState({authenticated: false});
+//         console.log('User is not authenticated');
+//       }
+//     } else {
+//       // If user details don't exist, the user is not authenticated
+//       this.setState({authenticated: false});
+//       console.log('User is not authenticated');
+//     }
+//   } catch (error) {
+//     console.error('Error checking authentication:', error);
+//   }
+// };

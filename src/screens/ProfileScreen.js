@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import BottomDesign from '../components/BottomDesign/BottomDesign';
 class ProfileScreen extends Component {
   constructor(props) {
     super(props);
@@ -47,7 +47,7 @@ class ProfileScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.header}>User Details</Text>
+        <Text style={styles.header}>USER PROFILE</Text>
         {userDetails ? (
           <View style={styles.userCard}>
             <Text style={styles.text}>User Name: {userDetails.userName}</Text>
@@ -68,6 +68,9 @@ class ProfileScreen extends Component {
         ) : (
           <Text>Loading user details...</Text>
         )}
+        <View style={styles.bottom}>
+          <BottomDesign />
+        </View>
       </View>
     );
   }
@@ -77,12 +80,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 16,
+    // padding: 16,
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 16,
+    margin: 16,
+    top: 10,
     color: 'black',
   },
   userCard: {
@@ -90,11 +94,18 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderRadius: 8,
     padding: 16,
-    marginBottom: 16,
+    margin: 16,
   },
   text: {
     fontSize: 18,
     color: 'black',
+    marginBottom: 15,
+  },
+  bottom: {
+    bottom: 0,
+    width: '100%',
+    height: 100,
+    position: 'absolute',
   },
 });
 
