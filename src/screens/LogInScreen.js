@@ -8,7 +8,6 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-
 // import packages
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../components/Buttons/CustomButton';
@@ -20,60 +19,37 @@ class LogInScreen extends Component {
     this.state = {
       userName: '',
       password: '',
-      isAuthenticated: false,
     };
   }
   newPassword = () => {
-    this.props.navigation.navigate('SetPasswordScreen');
+    this.props.navigation.navigate('SetPasswordScreen', {
+      userName: this.state.userName, // Pass the userName as a parameter
+    });
   };
   goToSignUp = () => {
     this.props.navigation.navigate('SignUpScreen');
   };
-  // handleLogin = async () => {
-  //   try {
-  //     // Retrieve the previously stored user data from AsyncStorage
-  //     const userDataJSON = await AsyncStorage.getItem('userData');
-  //     const userData = JSON.parse(userDataJSON);
-
-  //     // Check if the entered username and password match any user in the stored data
-  //     const {userName, password} = this.state;
-  //     const authenticatedUser = userData.find(
-  //       user => user.userName === userName && user.password === password,
-  //     );
-
-  //     if (authenticatedUser) {
-  //       this.setState({isAuthenticated: true});
-  //       this.props.navigation.navigate('HomeScreen', {
-  //         userName: authenticatedUser.userName,
-  //       });
-  //     } else {
-  //       alert('Authentication failed. Please check your credentials.');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error during login:', error);
-  //   }
-  // };
 
   handleLogin = async () => {
     const {userName, password} = this.state;
 
     try {
-      const existingData = await AsyncStorage.getItem('userData');
-      if (existingData) {
-        const users = JSON.parse(existingData);
+      const userDataJSON = await AsyncStorage.getItem('userData');
 
-        // Use a loop or the find function to check for a matching user
-        let authenticatedUser = null;
-        for (const user of users) {
-          if (user.userName === userName && user.password === password) {
-            authenticatedUser = user;
-            break;
-          }
-        }
+      if (userDataJSON) {
+        const userData = JSON.parse(userDataJSON);
+
+        // Find the user by username
+        const authenticatedUser = userData.find(
+          user => user.userName === userName && user.password === password,
+        );
 
         if (authenticatedUser) {
           // Authentication successful
-          this.props.navigation.navigate('HomeScreen');
+          // Pass the userName as a parameter to HomeScreen
+          this.props.navigation.navigate('HomeScreen', {
+            userName: authenticatedUser.userName,
+          });
         } else {
           console.error(
             'Authentication failed. Incorrect username or password.',
@@ -86,9 +62,9 @@ class LogInScreen extends Component {
       console.error('Error fetching user data:', error);
     }
   };
+
   render() {
     const {userName, password} = this.state;
-
     return (
       <SafeAreaView>
         <View style={styles.container}>

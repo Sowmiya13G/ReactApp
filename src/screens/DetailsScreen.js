@@ -17,9 +17,9 @@ class DetailsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
-      email: '',
-      mobileNumber: '',
+      userName: this.props.route.params.userName,
+      email: this.props.route.params.email,
+      mobileNumber: this.props.route.params.mobileNumber,
       designation: '',
       company: '',
       address: '',
@@ -28,89 +28,92 @@ class DetailsScreen extends Component {
   }
 
   componentDidMount() {
-    // Fetch existing user data from AsyncStorage and set it in the state
-    const {route} = this.props;
-    const {username, email, mobileNumber} = route.params;
-
-    this.setState({
-      username,
-      email,
-      mobileNumber,
-    });
+    const {userName, email, mobileNumber} = this.props.route.params;
+    this.setState({userName, email, mobileNumber});
+    this.fetchUserDetails();
   }
-  handleSaveDetails = async () => {
-    const {
-      username,
-      email,
-      mobileNumber,
-      designation,
-      company,
-      address,
-      location,
-    } = this.state;
+  fetchUserDetails = async () => {
+    try {
+      // Retrieve the userName parameter from navigation props
+      const {route} = this.props;
+      const {userName} = route.params;
 
-    // Create a user details object
-    const userDetails = {
-      username,
-      email,
-      mobileNumber,
-      designation,
-      company,
-      address,
-      location,
-    };
+      // Fetch user data from AsyncStorage
+      const userDataJSON = await AsyncStorage.getItem('userData');
+      if (userDataJSON) {
+        const userData = JSON.parse(userDataJSON);
+
+        // Find the user based on the userName
+        const userDetails = userData.find(user => user.userName === userName);
+
+        if (userDetails) {
+          this.setState({userDetails});
+        } else {
+          console.error('User not found');
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  };
+  handleSaveDetails = async () => {
+    const {userName} = this.props.route.params;
+    const {newDetails, designation, company, address, location} = this.state;
 
     try {
       // Fetch existing user details from AsyncStorage
-      const existingUserDetails = await AsyncStorage.getItem('userDetails');
-      let updatedUserDetails = [];
+      const userDataJSON = await AsyncStorage.getItem('userData');
+      if (userDataJSON) {
+        const userData = JSON.parse(userDataJSON);
 
-      if (existingUserDetails) {
-        updatedUserDetails = JSON.parse(existingUserDetails);
+        // Find the user based on the userName
+        const userIndex = userData.findIndex(
+          user => user.userName === userName,
+        );
+
+        if (userIndex !== -1) {
+          // Merge new details with existing details
+          const updatedUser = {
+            ...userData[userIndex],
+            designation,
+            company,
+            address,
+            location,
+            ...newDetails, // Add other new details here if needed
+          };
+
+          userData[userIndex] = updatedUser;
+
+          // Save the updated user data back to AsyncStorage
+          await AsyncStorage.setItem('userData', JSON.stringify(userData));
+          console.log(userData);
+          Alert.alert('Details saved successfully');
+          // userName: this.state.userName;
+          this.props.navigation.navigate('HomeScreen', {
+            email: this.state.email, // Pass the user's email
+            userName,
+          });
+          // Update the state with the new details
+          this.setState({
+            userDetails: updatedUser,
+            newDetails: {},
+            designation: '',
+            company: '',
+            address: '',
+            location: '',
+          });
+        } else {
+          console.error('User not found');
+        }
       }
-      await AsyncStorage.setItem(
-        'userDetails',
-        JSON.stringify(updatedUserDetails),
-      );
-
-      // Merge the new user details with existing details
-      updatedUserDetails.push(userDetails);
-
-      // Save the updated user details back to AsyncStorage
-      await AsyncStorage.setItem(
-        'userDetails',
-        JSON.stringify(updatedUserDetails),
-      );
-
-      Alert.alert('Details saved successfully');
-      this.props.navigation.navigate('HomeScreen', {
-        email: this.state.email, // Pass the user's email
-      });
-
-      // Optionally, you can clear the form fields here
-      this.setState({
-        designation: '',
-        company: '',
-        address: '',
-        location: '',
-      });
     } catch (error) {
       console.error('Error saving user details:', error);
     }
   };
 
-  componentDidMount() {
-    // Fetch user details from the navigation params (passed from SignUpScreen)
-    const {route} = this.props;
-    const {username, email, mobileNumber} = route.params;
-
-    this.setState({
-      username,
-      email,
-      mobileNumber,
-    });
-  }
   render() {
+    const {userName, email, mobileNumber} = this.state;
+    const {userDetails, newDetails} = this.state;
     return (
       <SafeAreaView>
         <ScrollView>
@@ -124,7 +127,8 @@ class DetailsScreen extends Component {
                 style={styles.input}
                 placeholder="Enter your email id"
                 placeholderTextColor="gray"
-                value={this.state.email}
+                keyboardType="email-address"
+                value={email}
                 onChangeText={text => this.setState({email: text})}
               />
 
@@ -133,7 +137,7 @@ class DetailsScreen extends Component {
                 style={styles.input}
                 placeholder="Enter your user name"
                 placeholderTextColor="gray"
-                value={this.state.userName}
+                value={userName}
                 onChangeText={text => this.setState({userName: text})}
               />
 
@@ -142,7 +146,8 @@ class DetailsScreen extends Component {
                 style={styles.input}
                 placeholder="Enter your mobile number"
                 placeholderTextColor="gray"
-                value={this.state.mobileNumber}
+                keyboardType="numeric"
+                value={mobileNumber}
                 onChangeText={text => this.setState({mobileNumber: text})}
               />
               <Text style={styles.title}>Designation</Text>

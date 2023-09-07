@@ -128,6 +128,8 @@ class SignUpScreen extends Component {
       // Save the updated user data to AsyncStorage
       await AsyncStorage.setItem('userData', JSON.stringify(updatedUsersData));
       Alert.alert('Sign up successful');
+      console.log(userData);
+
       // Clear the form fields and errors
       this.setState({
         email: '',
@@ -145,12 +147,10 @@ class SignUpScreen extends Component {
         usersData: updatedUsersData, // Update the state with the new user data
       });
 
-      console.log(userData);
-
       this.props.navigation.navigate('DetailsScreen', {
-        username: this.state.userName,
-        email: this.state.email,
-        mobileNumber: this.state.mobileNumber,
+        userName,
+        email,
+        mobileNumber,
       });
     } catch (error) {
       console.error('Error saving user details:', error);
@@ -177,6 +177,7 @@ class SignUpScreen extends Component {
                 style={styles.input}
                 placeholder="Enter your email id"
                 placeholderTextColor="gray"
+                keyboardType="email-address"
                 value={this.state.email}
                 onChangeText={text => this.setState({email: text})}
               />
@@ -197,6 +198,7 @@ class SignUpScreen extends Component {
                 style={styles.input}
                 placeholder="Enter your mobile number"
                 placeholderTextColor="gray"
+                keyboardType="numeric"
                 value={this.state.mobileNumber}
                 onChangeText={text => this.setState({mobileNumber: text})}
               />

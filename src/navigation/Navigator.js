@@ -27,7 +27,6 @@ class Navigator extends Component {
     // Check if the user is authenticated (e.g., by checking AsyncStorage)
     this.checkAuthentication();
   }
-
   checkAuthentication = async () => {
     try {
       const userDataJSON = await AsyncStorage.getItem('userData');
@@ -37,15 +36,15 @@ class Navigator extends Component {
         // Parse the JSON string to an object
         const userData = JSON.parse(userDataJSON);
 
-        // Access the email property from userData
-        const userEmail = userData.email;
+        // Access the userName property from userData
+        const userName = userData.userName;
 
-        if (userEmail != '') {
-          // If email exists, consider the user as authenticated
+        if (userName) {
+          // If userName exists, consider the user as authenticated
           this.setState({authenticated: true});
-          console.log('User is authenticated with email:', userEmail);
+          console.log('User is authenticated with userName:', userName);
         } else {
-          // If email doesn't exist, the user is not authenticated
+          // If userName doesn't exist, the user is not authenticated
           this.setState({authenticated: false});
           console.log('User is not authenticated');
         }
@@ -58,6 +57,38 @@ class Navigator extends Component {
       console.error('Error checking authentication:', error);
     }
   };
+
+  // checkAuthentication = async () => {
+  //   try {
+  //     const userDataJSON = await AsyncStorage.getItem('userData');
+  //     console.log('userDataJSON:', userDataJSON); // Debug: Log user data
+
+  //     if (userDataJSON) {
+  //       // Parse the JSON string to an object
+  //       const userData = JSON.parse(userDataJSON);
+
+  //       // Access the email property from userData
+  //       const userEmail = userData.email;
+
+  //       if (userEmail != '') {
+  //         // If email exists, consider the user as authenticated
+  //         this.setState({authenticated: true});
+  //         console.log('User is authenticated with email:', userEmail);
+  //       } else {
+  //         // If email doesn't exist, the user is not authenticated
+  //         this.setState({authenticated: false});
+  //         console.log('User is not authenticated');
+  //       }
+  //     } else {
+  //       // If user details don't exist, the user is not authenticated
+  //       this.setState({authenticated: false});
+  //       console.log('User is not authenticated');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error checking authentication:', error);
+  //   }
+  // };
+
   render() {
     const {authenticated} = this.state;
     console.log(authenticated, 'gfgfg');
@@ -65,7 +96,7 @@ class Navigator extends Component {
     return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName={!authenticated ? 'HomeScreen' : 'WelcomeScreen'}>
+          initialRouteName={authenticated ? 'HomeScreen' : 'WelcomeScreen'}>
           <Stack.Screen
             name="WelcomeScreen"
             component={WelcomeScreen}

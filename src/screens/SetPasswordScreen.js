@@ -22,6 +22,13 @@ class SetPasswordScreen extends Component {
       error: '',
     };
   }
+  componentDidMount() {
+    const {route} = this.props;
+    const {userName} = route.params;
+
+    // Set the userName from the navigation parameter
+    this.setState({userName});
+  }
   validateInputs = () => {
     let isValid = true;
     this.setState({error: ''});
@@ -45,42 +52,46 @@ class SetPasswordScreen extends Component {
 
     return isValid;
   };
-  handlePassword = async () => {
-    const {newPassword, userName: userName} = this.state;
-    // if (this.validateInputs()) {
-    try {
-      const userDataJSON = await AsyncStorage.getItem('userDetails');
-      if (userDataJSON) {
-        const userData = JSON.parse(userDataJSON);
-        // Find the user by username
-        if (userData.userName === userName) {
-          userData.password = newPassword;
-          await AsyncStorage.setItem('userDetails', JSON.stringify(userData));
+  handlePasswordUpdate = async () => {
+    const {userName, newPassword, confirmPassword} = this.state;
 
-          this.setState({
-            userName: '',
-            newPassword: '',
-            confirmPassword: '',
-            error: '',
+    // Add validation logic for password and confirmPassword as needed
+    if (newPassword === confirmPassword) {
+      try {
+        const userDataJSON = await AsyncStorage.getItem('userData');
+
+        if (userDataJSON) {
+          const userData = JSON.parse(userDataJSON);
+
+          // Find the user by username
+          const updatedUserData = userData.map(user => {
+            if (user.userName === userName) {
+              return {...user, password: newPassword};
+            }
+            return user;
           });
 
+          await AsyncStorage.setItem(
+            'userData',
+            JSON.stringify(updatedUserData),
+          );
+
+          // Navigate to LogInScreen
           this.props.navigation.navigate('LogInScreen');
-
-          console.log('Password updated successfully.');
         } else {
-          this.setState({
-            error: 'User not found. Please enter a valid username.',
-          });
+          console.error('User data not found.');
         }
-      } else {
-        console.error('User data not found.');
+      } catch (error) {
+        console.error('Error updating password:', error);
       }
-    } catch (error) {
-      console.error('Error updating password:', error);
+    } else {
+      console.error('Passwords do not match.');
     }
-    // }
   };
+
   render() {
+    const {newPassword, confirmPassword} = this.state;
+
     return (
       <SafeAreaView>
         <View style={styles.container}>
