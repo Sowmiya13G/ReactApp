@@ -8,7 +8,6 @@ import {
   Text,
 } from 'react-native';
 import axios from 'axios';
-import BottomDesign from '../components/BottomDesign/BottomDesign';
 
 const URL = 'https://fakestoreapi.com/products';
 class HomeScreen extends Component {
@@ -113,9 +112,6 @@ class HomeScreen extends Component {
             keyExtractor={item => item.id.toString()}
           />
         </View>
-        <View style={styles.bottom}>
-          <BottomDesign />
-        </View>
       </View>
     );
   }
@@ -133,12 +129,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   logo: {
-    height: 25,
-    width: 25,
+    top: 4,
+    height: 21,
+    width: 21,
   },
   profile: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     // width: 100,
   },
   text: {
@@ -223,12 +220,6 @@ const styles = StyleSheet.create({
     color: 'green',
     right: 15,
     bottom: 15,
-    position: 'absolute',
-  },
-  bottom: {
-    bottom: 0,
-    width: '100%',
-    height: 100,
     position: 'absolute',
   },
 });
