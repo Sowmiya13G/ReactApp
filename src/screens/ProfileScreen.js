@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomDesign from '../components/BottomDesign/BottomDesign';
+import CustomButton from '../components/Buttons/CustomButton';
+
 class ProfileScreen extends Component {
   constructor(props) {
     super(props);
@@ -10,7 +12,9 @@ class ProfileScreen extends Component {
       userDetails: null,
     };
   }
-
+  goToLogOut = () => {
+    this.props.navigation.navigate('WelcomeScreen');
+  };
   componentDidMount() {
     // Retrieve the userName parameter from navigation props
     const {route} = this.props;
@@ -68,6 +72,13 @@ class ProfileScreen extends Component {
         ) : (
           <Text>Loading user details...</Text>
         )}
+        <View style={styles.button}>
+          <CustomButton
+            signUpButton
+            label="LOG OUT"
+            handlePress={this.goToLogOut}
+          />
+        </View>
         <View style={styles.bottom}>
           <BottomDesign />
         </View>
@@ -80,12 +91,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    // padding: 16,
+    alignItems: 'center',
+    // justifyContent: 'center',
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    margin: 16,
+    margin: 25,
     top: 10,
     color: 'black',
   },
@@ -93,8 +105,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
     borderRadius: 8,
-    padding: 16,
-    margin: 16,
+    padding: 15,
+    margin: 20,
+    width: '90%',
   },
   text: {
     fontSize: 18,
@@ -106,6 +119,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 100,
     position: 'absolute',
+  },
+  button: {
+    width: '60%',
+    margin: 20,
   },
 });
 

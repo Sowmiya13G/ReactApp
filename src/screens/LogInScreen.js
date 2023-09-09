@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   logo: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: 60,
     marginBottom: 50,
     height: 160,
     width: 160,

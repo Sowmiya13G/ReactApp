@@ -75,6 +75,7 @@ class Navigator extends Component {
             component={WelcomeScreen}
             options={{
               title: '',
+              headerShown: false,
             }}
           />
           <Stack.Screen
@@ -82,6 +83,7 @@ class Navigator extends Component {
             component={LogInScreen}
             options={{
               title: '',
+              headerShown: false,
             }}
           />
           <Stack.Screen
@@ -89,6 +91,7 @@ class Navigator extends Component {
             component={SignUpScreen}
             options={{
               title: '',
+              headerShown: false,
             }}
           />
           <Stack.Screen
@@ -96,6 +99,7 @@ class Navigator extends Component {
             component={HomeScreen}
             options={{
               title: '',
+              headerShown: false,
             }}
           />
           <Stack.Screen
@@ -103,6 +107,7 @@ class Navigator extends Component {
             component={DetailsScreen}
             options={{
               title: '',
+              headerShown: false,
             }}
           />
           <Stack.Screen
@@ -110,6 +115,7 @@ class Navigator extends Component {
             component={SetPasswordScreen}
             options={{
               title: '',
+              headerShown: false,
             }}
           />
           <Stack.Screen
@@ -117,6 +123,7 @@ class Navigator extends Component {
             component={ProfileScreen}
             options={{
               title: '',
+              headerShown: false,
             }}
           />
         </Stack.Navigator>
