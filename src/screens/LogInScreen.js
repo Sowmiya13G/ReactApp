@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 // import packages
+import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../components/Buttons/CustomButton';
 import BottomDesign from '../components/BottomDesign/BottomDesign';
@@ -19,6 +20,7 @@ class LogInScreen extends Component {
     this.state = {
       userName: '',
       password: '',
+      showPassword: false,
     };
   }
   newPassword = () => {
@@ -30,6 +32,11 @@ class LogInScreen extends Component {
     this.props.navigation.navigate('SignUpScreen');
   };
 
+  handlePasswordVisibility = () => {
+    this.setState(prevState => ({
+      showPassword: !prevState.showPassword,
+    }));
+  };
   handleLogin = async () => {
     const {userName, password} = this.state;
 
@@ -92,12 +99,17 @@ class LogInScreen extends Component {
                 placeholderTextColor="grey"
                 value={password}
                 onChangeText={text => this.setState({password: text})}
-                secureTextEntry={true}
+                secureTextEntry={this.state.showPassword}
               />
-              <Image
+              <TouchableOpacity
                 style={styles.icon}
-                source={require('./../assets/images/hide.png')}
-              />
+                onPress={this.handlePasswordVisibility}>
+                <Icon
+                  name={this.state.showPassword ? 'eye' : 'eye-slash'} // Use FontAwesome icons 'eye' and 'eye-slash'
+                  size={20}
+                  color="grey"
+                />
+              </TouchableOpacity>
             </View>
           </View>
           <TouchableOpacity style={styles.forgot}>
@@ -176,12 +188,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   icon: {
-    height: 15,
-    width: 15,
+    height: 20,
+    width: 20,
     marginRight: 50,
     right: '0%',
     position: 'absolute',
     marginVertical: 13,
+    marginTop: 5,
+    // marginBottom: 5,
   },
   forgot: {
     alignItems: 'flex-end',
