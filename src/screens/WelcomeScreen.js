@@ -1,19 +1,45 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-
+import React, {Component} from 'react';
+import {StyleSheet, View, Image} from 'react-native';
+import notifee from '@notifee/react-native';
 import CustomButton from '../components/Buttons/CustomButton';
 import BottomDesign from '../components/BottomDesign/BottomDesign';
 
 class WelcomeScreen extends Component {
   // navigation methods using props
   goToSignUp = () => {
-    console.log('SIGN UP Button clicked')
+    console.log('SIGN UP Button clicked');
     this.props.navigation.navigate('SignUpScreen');
   };
 
   goToLogIn = () => {
-    console.log('LOG IN Button clicked')
+    console.log('LOG IN Button clicked');
     this.props.navigation.navigate('LogInScreen');
+    this.onDisplayNotification();
+  };
+
+  onDisplayNotification = async () => {
+    // Request permissions (required for iOS)
+    await notifee.requestPermission();
+
+    // Create a channel (required for Android)
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+    });
+
+    // Display a notification
+    await notifee.displayNotification({
+      title: 'Hey User',
+      body: 'You are being directed to the LOG IN screen',
+      android: {
+        channelId,
+        smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
+        // pressAction is needed if you want the notification to open the app when pressed
+        pressAction: {
+          id: 'default',
+        },
+      },
+    });
   };
 
   render() {
