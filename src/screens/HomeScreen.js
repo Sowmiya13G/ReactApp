@@ -7,9 +7,7 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import axios from 'axios';
-
-const URL = 'https://fakestoreapi.com/products';
+import {fetchProductsUsingFetch, fetchProductsUsingAxios} from '../api/api';
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -31,25 +29,41 @@ class HomeScreen extends Component {
     if (userName) {
       this.setState({userName});
     }
-
-    // Fetch data from api using fetch method
-    fetch(URL)
-      .then(response => response.json())
+    // Fetch data from the API using the functions from api.js
+    fetchProductsUsingFetch()
       .then(data => {
         this.setState({topList: data});
       })
       .catch(error => {
         console.error('Error fetching products', error);
       });
-    // Fetch data from api using axios method
-    axios
-      .get(URL)
-      .then(response => {
-        this.setState({bottomList: response.data});
+
+    fetchProductsUsingAxios()
+      .then(data => {
+        this.setState({bottomList: data});
       })
       .catch(error => {
         console.error('Error fetching data', error);
       });
+
+    // // Fetch data from api using fetch method
+    // fetch(URL)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     this.setState({topList: data});
+    //   })
+    //   .catch(error => {
+    //     console.error('Error fetching products', error);
+    //   });
+    // // Fetch data from api using axios method
+    // axios
+    //   .get(URL)
+    //   .then(response => {
+    //     this.setState({bottomList: response.data});
+    //   })
+    //   .catch(error => {
+    //     console.error('Error fetching data', error);
+    //   });
   }
   // navigation
 
