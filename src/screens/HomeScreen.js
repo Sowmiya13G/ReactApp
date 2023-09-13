@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   Text,
+  Linking,
 } from 'react-native';
 import {fetchProductsUsingFetch, fetchProductsUsingAxios} from '../api/api';
 import analytics from '@react-native-firebase/analytics';
@@ -85,7 +86,16 @@ class HomeScreen extends Component {
       .then(() => console.log('Add to Cart event tracked'))
       .catch(error => console.error('Error tracking Add to Cart event', error));
   };
-
+  openAmazonWebsite() {
+    const amazonUrl = 'https://www.amazon.com'; // Replace with the Amazon URL you want to open
+    Linking.openURL(amazonUrl)
+      .then(() => {
+        console.log(`Opened Amazon website: ${amazonUrl}`);
+      })
+      .catch(error => {
+        console.error(`Error opening Amazon website: ${amazonUrl}`, error);
+      });
+  }
   renderTopList = ({item}) => (
     <TouchableOpacity onPress={() => this.showProductDetails(item)}>
       <View style={styles.topListItem}>
@@ -93,7 +103,7 @@ class HomeScreen extends Component {
         <Text style={styles.topTitle}>{item.title}</Text>
         <Text style={styles.topPrice}>${item.price}</Text>
         <TouchableOpacity
-          onPress={() => this.openProductModal(item)} // Add an item to cart on press
+          onPress={() => this.trackAddToCart(item)} // Add an item to cart on press
           style={styles.addToCartButton}>
           <Text style={styles.addToCartButtonText}>Add to Cart</Text>
         </TouchableOpacity>
@@ -136,7 +146,12 @@ class HomeScreen extends Component {
               horizontal={true}
             />
           </View>
-          <Text style={styles.sectionTitle}>Bottom List (Axios method)</Text>
+          <View style={styles.bottomListTitleContainer}>
+            <Text style={styles.sectionTitle}>Bottom List (Axios method)</Text>
+            <TouchableOpacity onPress={() => this.openAmazonWebsite()}>
+              <Text style={styles.viewMoreButtonText}>View More</Text>
+            </TouchableOpacity>
+          </View>
           <FlatList
             data={bottomList}
             renderItem={this.renderBottomList}
@@ -277,7 +292,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 10,
   },
-
+  bottomListTitleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  viewMoreButtonText: {
+    color: 'red',
+    fontWeight: 'bold',
+    fontSize: 15,
+    marginTop: 10,
+    right: 10,
+    // position: 'absolute',
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',

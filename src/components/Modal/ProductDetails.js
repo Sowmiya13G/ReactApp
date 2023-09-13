@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   Modal,
   View,
@@ -8,46 +8,49 @@ import {
   StyleSheet,
 } from 'react-native';
 
-const ProductDetailsModal = ({isVisible, product, onClose, onAddToCart}) => {
-  if (!product) {
-    return null;
-  }
+class ProductDetailsModal extends Component {
+  render() {
+    const {isVisible, product, onClose, onAddToCart} = this.props;
 
-  return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={isVisible}
-      onRequestClose={onClose}>
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>{product.title}</Text>
-          <Image source={{uri: product.image}} style={styles.modalImage} />
-          <Text style={styles.modalPrice}>Price: ${product.price}</Text>
-          <TouchableOpacity
-            onPress={() => {
-              onAddToCart(product);
-              onClose();
-            }}
-            style={styles.addToCartButton}>
-            <Text style={styles.addToCartButtonText}>Add to Cart</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onClose} style={styles.closeModalButton}>
-            <Text style={styles.closeModalButtonText}>Close</Text>
-          </TouchableOpacity>
+    if (!isVisible || !product) {
+      return null;
+    }
+
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isVisible}
+        onRequestClose={onClose}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{product.title}</Text>
+            <Image source={{uri: product.image}} style={styles.modalImage} />
+            <Text style={styles.modalPrice}>Price: ${product.price}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                onAddToCart(product);
+                onClose();
+              }}
+              style={styles.addToCartButton}>
+              <Text style={styles.addToCartButtonText}>Add to Cart</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onClose} style={styles.closeModalButton}>
+              <Text style={styles.closeModalButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </Modal>
-  );
-};
+      </Modal>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    background: '#000000',
-    opacity: 0.5,
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContent: {
     backgroundColor: '#fff',
