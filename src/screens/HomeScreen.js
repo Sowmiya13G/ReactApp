@@ -11,6 +11,7 @@ import {
 import {fetchProductsUsingFetch, fetchProductsUsingAxios} from '../api/api';
 import analytics from '@react-native-firebase/analytics';
 import ProductDetailsModal from '../components/Modal/ProductDetails';
+import NotificationServices from '../utils/NotificationServices';
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -96,6 +97,11 @@ class HomeScreen extends Component {
         console.error(`Error opening Amazon website: ${amazonUrl}`, error);
       });
   }
+
+  // Function to show the notification using the NotificationService class
+  showViewMoreNotificationHandler = () => {
+    NotificationService.showViewMoreNotification();
+  };
   renderTopList = ({item}) => (
     <TouchableOpacity onPress={() => this.showProductDetails(item)}>
       <View style={styles.topListItem}>
@@ -165,6 +171,9 @@ class HomeScreen extends Component {
           onClose={this.closeProductModal}
           onAddToCart={this.trackAddToCart}
         />
+        {/* <TouchableOpacity onPress={this.showViewMoreNotificationHandler}>
+          <Text>Show Notification</Text>
+        </TouchableOpacity> */}
       </View>
     );
   }
