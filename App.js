@@ -4,7 +4,6 @@ import {
   requestUserPermission,
   setupFCMListeners,
 } from './src/utils/pushnotification_helper';
-
 class App extends Component {
   componentDidMount() {
     requestUserPermission();

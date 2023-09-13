@@ -8,6 +8,8 @@ import {
   Text,
 } from 'react-native';
 import {fetchProductsUsingFetch, fetchProductsUsingAxios} from '../api/api';
+import analytics from '@react-native-firebase/analytics';
+import ProductDetailsModal from '../components/Modal/ProductDetails';
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -17,6 +19,8 @@ class HomeScreen extends Component {
       userName: this.props.route.params.userName,
       topList: [],
       bottomList: [],
+      selectedProduct: null,
+      isModalVisible: false,
     };
   }
   componentDidMount() {
@@ -45,27 +49,7 @@ class HomeScreen extends Component {
       .catch(error => {
         console.error('Error fetching data', error);
       });
-
-    // // Fetch data from api using fetch method
-    // fetch(URL)
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     this.setState({topList: data});
-    //   })
-    //   .catch(error => {
-    //     console.error('Error fetching products', error);
-    //   });
-    // // Fetch data from api using axios method
-    // axios
-    //   .get(URL)
-    //   .then(response => {
-    //     this.setState({bottomList: response.data});
-    //   })
-    //   .catch(error => {
-    //     console.error('Error fetching data', error);
-    //   });
   }
-  // navigation
 
   goToProfile = () => {
     const {userName, userDetails} = this.props.route.params;
@@ -76,12 +60,45 @@ class HomeScreen extends Component {
     });
   };
 
+  // Function to show the product details modal
+  showProductDetails = product => {
+    this.setState({
+      selectedProduct: product,
+      isModalVisible: true,
+    });
+  };
+
+  // Function to close the product details modal
+  closeProductDetails = () => {
+    this.setState({
+      selectedProduct: null,
+      isModalVisible: false,
+    });
+  };
+  trackAddToCart = item => {
+    analytics()
+      .logEvent('add_to_cart', {
+        item_id: item.id,
+        item_name: item.title,
+        price: item.price,
+      })
+      .then(() => console.log('Add to Cart event tracked'))
+      .catch(error => console.error('Error tracking Add to Cart event', error));
+  };
+
   renderTopList = ({item}) => (
-    <View style={styles.topListItem}>
-      <Image source={{uri: item.image}} style={styles.topImage} />
-      <Text style={styles.topTitle}>{item.title}</Text>
-      <Text style={styles.topPrice}>${item.price}</Text>
-    </View>
+    <TouchableOpacity onPress={() => this.showProductDetails(item)}>
+      <View style={styles.topListItem}>
+        <Image source={{uri: item.image}} style={styles.topImage} />
+        <Text style={styles.topTitle}>{item.title}</Text>
+        <Text style={styles.topPrice}>${item.price}</Text>
+        <TouchableOpacity
+          onPress={() => this.openProductModal(item)} // Add an item to cart on press
+          style={styles.addToCartButton}>
+          <Text style={styles.addToCartButtonText}>Add to Cart</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
   );
   renderBottomList = ({item}) => (
     <View style={styles.bottomListItem}>
@@ -126,6 +143,13 @@ class HomeScreen extends Component {
             keyExtractor={item => item.id.toString()}
           />
         </View>
+        {/* Render the product details modal */}
+        <ProductDetailsModal
+          isVisible={this.state.isModalVisible}
+          product={this.state.selectedProduct}
+          onClose={this.closeProductModal}
+          onAddToCart={this.trackAddToCart}
+        />
       </View>
     );
   }
@@ -159,7 +183,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 25,
-    color: 'black',
+    color: '#000000',
   },
   apiContainer: {
     flex: 1,
@@ -183,7 +207,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     position: 'relative',
-    height: 200,
+    height: 250,
   },
   topImage: {
     width: 100,
@@ -200,7 +224,7 @@ const styles = StyleSheet.create({
     color: 'red',
     position: 'absolute',
     left: 10,
-    bottom: 3,
+    bottom: 30,
   },
   bottomListItem: {
     margin: 10,
@@ -236,6 +260,61 @@ const styles = StyleSheet.create({
     bottom: 15,
     position: 'absolute',
   },
+  addToCartButton: {
+    // marginTop: 8,
+    backgroundColor: '#1E90FF',
+    padding: 2,
+    borderRadius: 5,
+    height: 20,
+    width: 55,
+    bottom: 5,
+    left: 10,
+    position: 'absolute',
+  },
+  addToCartButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 10,
+  },
+
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000000',
+    opacity: 0.5,
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+    width: '80%',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
 });
 
 export default HomeScreen;
+
+// // Fetch data from api using fetch method
+// fetch(URL)
+//   .then(response => response.json())
+//   .then(data => {
+//     this.setState({topList: data});
+//   })
+//   .catch(error => {
+//     console.error('Error fetching products', error);
+//   });
+// // Fetch data from api using axios method
+// axios
+//   .get(URL)
+//   .then(response => {
+//     this.setState({bottomList: response.data});
+//   })
+//   .catch(error => {
+//     console.error('Error fetching data', error);
+//   });
+
+// navigation

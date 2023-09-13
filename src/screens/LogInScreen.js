@@ -8,6 +8,8 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import crashlytics from '@react-native-firebase/crashlytics';
+
 // import packages
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -61,12 +63,22 @@ class LogInScreen extends Component {
           console.error(
             'Authentication failed. Incorrect username or password.',
           );
+
+          // Log the authentication failure in Crashlytics
+          crashlytics().recordError(new Error(errorMessage));
+          console.error(errorMessage);
         }
       } else {
         console.error('User data not found.');
+        // Log the missing user data in Crashlytics with an Error object
+        crashlytics().recordError(new Error(errorMessage));
+
+        console.error(errorMessage);
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
+      // Log the error in Crashlytics
+      crashlytics().recordError(error);
     }
   };
 

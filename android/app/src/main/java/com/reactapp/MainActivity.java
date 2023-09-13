@@ -1,10 +1,11 @@
 package com.reactapp;
 
+import android.os.Bundle; // Import the Bundle class
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
-
+import io.invertase.firebase.crashlytics.ReactNativeFirebaseCrashlyticsNativeHelper;
 public class MainActivity extends ReactActivity {
 
   /**
@@ -29,4 +30,23 @@ public class MainActivity extends ReactActivity {
         // If you opted-in for the New Architecture, we enable the Fabric Renderer.
         DefaultNewArchitectureEntryPoint.getFabricEnabled());
   }
+   // Example of handling non-fatal exceptions
+  private void handleNonFatalException(Exception e) {
+      // Log the exception to Crashlytics
+      ReactNativeFirebaseCrashlyticsNativeHelper.recordNativeException(e);
+    }
+  // @Override
+  //   protected void onCreate(Bundle savedInstanceState) {
+  //     super.onCreate(savedInstanceState);
+
+  //     // Initialize Firebase Crashlytics (if needed)
+  //     ReactNativeFirebaseCrashlyticsNativeHelper.crashlyticsInit();
+
+  //     try {
+  //       // Your existing code
+  //     } catch (Exception e) {
+  //       // Handle the exception and log to Crashlytics
+  //       handleNonFatalException(e);
+  //     }
+  //   }
 }
