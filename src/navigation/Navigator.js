@@ -4,7 +4,6 @@ import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createDeepLinkingHandler} from 'react-navigation-deep-linking';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import HomeScreen from '../screens/HomeScreen';
 import LogInScreen from '../screens/LogInScreen';
@@ -14,7 +13,6 @@ import SetPasswordScreen from '../screens/SetPasswordScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 const Stack = createStackNavigator();
-const prefix = 'myapp://';
 
 class Navigator extends Component {
   constructor(props) {
@@ -67,13 +65,10 @@ class Navigator extends Component {
     if (!checkedAuthentication) {
       return null; // You can replace this with a loading component
     }
-    const linking = {
-      prefixes: [prefix],
-    };
+
     const AppWithDeepLinking = createDeepLinkingHandler(AppContainer, linking);
     return (
       <NavigationContainer>
-        <AppWithDeepLinking />
         <Stack.Navigator
           initialRouteName={authenticated ? 'HomeScreen' : 'WelcomeScreen'}>
           <Stack.Screen

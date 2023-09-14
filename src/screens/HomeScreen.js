@@ -11,7 +11,6 @@ import {
 import {fetchProductsUsingFetch, fetchProductsUsingAxios} from '../api/api';
 import analytics from '@react-native-firebase/analytics';
 import ProductDetailsModal from '../components/Modal/ProductDetails';
-import NotificationServices from '../utils/NotificationServices';
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -168,12 +167,9 @@ class HomeScreen extends Component {
         <ProductDetailsModal
           isVisible={this.state.isModalVisible}
           product={this.state.selectedProduct}
-          onClose={this.closeProductModal}
+          onClose={this.closeProductDetails}
           onAddToCart={this.trackAddToCart}
         />
-        {/* <TouchableOpacity onPress={this.showViewMoreNotificationHandler}>
-          <Text>Show Notification</Text>
-        </TouchableOpacity> */}
       </View>
     );
   }
