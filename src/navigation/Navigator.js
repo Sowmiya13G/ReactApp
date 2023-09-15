@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Linking} from 'react-native';
 import React, {Component} from 'react';
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -13,7 +13,19 @@ import SetPasswordScreen from '../screens/SetPasswordScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 const Stack = createStackNavigator();
-
+const linking = {
+  prefixes: ['https://reactapp.com', 'reactapp://'],
+  config: {
+    screens: {
+      LogInScreen: {
+        path: 'loginscreen',
+      },
+      SignUpScreen: {
+        path: 'signupscreen/:id',
+      },
+    },
+  },
+};
 class Navigator extends Component {
   constructor(props) {
     super(props);
@@ -24,9 +36,23 @@ class Navigator extends Component {
     };
   }
   componentDidMount() {
-    // Check if the user is authenticated (e.g., by checking AsyncStorage)
+    // Check if the user is authenticated
     this.checkAuthentication();
+    // Listen for deep link events
+    Linking.addEventListener('url', this.handleDeepLink);
   }
+  componentWillUnmount() {
+    // Remove the event listener when the component unmounts
+    Linking.removeEventListener('url', this.handleDeepLink);
+  }
+  handleDeepLink = async event => {
+    const {path, queryParams} = linking.parse(event.url);
+    if (path === 'signup') {
+      // Extract parameters from queryParams and navigate to DetailsScreen
+      const {id} = queryParams;
+      this.props.navigation.navigate('signup', {id});
+    }
+  };
   checkAuthentication = async () => {
     try {
       const userDataJSON = await AsyncStorage.getItem('userData');
@@ -63,12 +89,11 @@ class Navigator extends Component {
   render() {
     const {authenticated, checkedAuthentication} = this.state;
     if (!checkedAuthentication) {
-      return null; // You can replace this with a loading component
+      return null;
     }
 
-    const AppWithDeepLinking = createDeepLinkingHandler(AppContainer, linking);
     return (
-      <NavigationContainer>
+      <NavigationContainer linking={linking}>
         <Stack.Navigator
           initialRouteName={authenticated ? 'HomeScreen' : 'WelcomeScreen'}>
           <Stack.Screen
@@ -135,7 +160,6 @@ class Navigator extends Component {
 
 export default Navigator;
 
-const styles = StyleSheet.create({});
 // checkAuthentication = async () => {
 //   try {
 //     const userDataJSON = await AsyncStorage.getItem('userData');

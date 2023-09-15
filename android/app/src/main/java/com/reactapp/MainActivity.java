@@ -1,11 +1,19 @@
 package com.reactapp;
 
-import android.os.Bundle; // Import the Bundle class
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle; 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import io.invertase.firebase.crashlytics.ReactNativeFirebaseCrashlyticsNativeHelper;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+
 public class MainActivity extends ReactActivity {
 
   /**
@@ -35,18 +43,65 @@ public class MainActivity extends ReactActivity {
       // Log the exception to Crashlytics
       ReactNativeFirebaseCrashlyticsNativeHelper.recordNativeException(e);
     }
-  // @Override
-  //   protected void onCreate(Bundle savedInstanceState) {
-  //     super.onCreate(savedInstanceState);
 
-  //     // Initialize Firebase Crashlytics (if needed)
-  //     ReactNativeFirebaseCrashlyticsNativeHelper.crashlyticsInit();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(null);
 
-  //     try {
-  //       // Your existing code
-  //     } catch (Exception e) {
-  //       // Handle the exception and log to Crashlytics
-  //       handleNonFatalException(e);
-  //     }
-  //   }
+  // Initialize Firebase Dynamic Links and handle deep links
+    FirebaseDynamicLinks.getInstance().getDynamicLink(getIntent())
+        .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+          @Override
+          public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+            // Handle the dynamic link here
+            Uri deepLink = null;
+            if (pendingDynamicLinkData != null) {
+              deepLink = pendingDynamicLinkData.getLink();
+            }
+            // Handle the deep link (e.g., open specific content)
+            handleDeepLink(deepLink);
+          }
+        })
+        .addOnFailureListener(this, new OnFailureListener() {
+          @Override
+          public void onFailure(@NonNull Exception e) {
+            Log.w(TAG, "getDynamicLink:onFailure", e);
+          }
+        });
+  }
+
+  // Implement your deep link handling logic here
+  private void handleDeepLink(Uri deepLink) {
+    if (deepLink != null) {
+      // Parse and process the deep link URL here
+      String deepLinkString = deepLink.toString();
+
+      // Depending on the deep link structure, you can perform specific actions
+      if (deepLinkString.contains("nandhini.page.link/login")) {
+        // Open a specific activity or fragment
+        openSomePageActivity();
+      } else if (deepLinkString.contains("nandhini.page.link/signup")) {
+        // Open another activity or fragment
+        openAnotherPageActivity();
+      } else {
+        // Handle other cases or show a default page
+        openDefaultActivity();
+      }
+    }
+  }
+
+  // Implement your activity-opening logic here
+  private void openSomePageActivity() {
+    // Open the activity for "example.com/somepage"
+    // You can start a new activity or fragment here
+  }
+
+  private void openAnotherPageActivity() {
+    // Open the activity for "example.com/anotherpage"
+    // You can start a new activity or fragment here
+  }
+
+  private void openDefaultActivity() {
+    // Handle other cases or show a default page
+  }
 }
