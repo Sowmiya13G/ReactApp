@@ -1,9 +1,11 @@
 import {StyleSheet, Linking} from 'react-native';
 import React, {Component} from 'react';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
 import WelcomeScreen from '../screens/WelcomeScreen';
 import HomeScreen from '../screens/HomeScreen';
 import LogInScreen from '../screens/LogInScreen';
@@ -11,8 +13,11 @@ import SignUpScreen from '../screens/SignUpScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import SetPasswordScreen from '../screens/SetPasswordScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import ProductScreen from '../screens/ProductScreen';
+import PriceScreen from '../screens/PriceScreen';
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 const linking = {
   prefixes: ['https://reactapp.com', 'reactapp://'],
   config: {
@@ -40,7 +45,7 @@ class Navigator extends Component {
   }
   componentWillUnmount() {
     // Remove the event listener when the component unmounts
-    Linking.removeEventListener('url', this.handleDeepLink);
+    // Linking.removeEventListener('url', this.handleDeepLink);
   }
   handleDeepLink = async event => {
     const {path, queryParams} = linking.parse(event.url);
@@ -92,7 +97,7 @@ class Navigator extends Component {
     return (
       <NavigationContainer linking={linking}>
         <Stack.Navigator
-          initialRouteName={authenticated ? 'HomeScreen' : 'WelcomeScreen'}>
+          initialRouteName={authenticated ? 'TabNavigator' : 'WelcomeScreen'}>
           <Stack.Screen
             name="WelcomeScreen"
             component={WelcomeScreen}
@@ -149,13 +154,40 @@ class Navigator extends Component {
               headerShown: false,
             }}
           />
+          {/* <Stack.Screen
+            name="HomeScreen"
+            component={this.createTabNavigator}
+            options={{
+              title: '',
+              headerShown: false,
+            }}
+          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     );
   }
+  // createTabNavigator = () => {
+  //   return (
+  //     <Tab.Navigator>
+  //       <Tab.Screen name="Home" component={HomeScreen} />
+  //       <Tab.Screen name="Products" component={ProductScreen} />
+  //       <Tab.Screen name="Price" component={PriceScreen} />
+  //     </Tab.Navigator>
+  //   );
+  // };
 }
-
 export default Navigator;
+
+// Define a separate component for the TabNavigator
+// TabNavigator = () => {
+//   return (
+//     <Tab.Navigator>
+//       <Tab.Screen name="HomeScreen" component={HomeScreen} />
+//       <Tab.Screen name="ProductScreen" component={ProductScreen} />
+//       <Tab.Screen name="PriceScreen" component={PriceScreen} />
+//     </Tab.Navigator>
+//   );
+// };
 
 // checkAuthentication = async () => {
 //   try {

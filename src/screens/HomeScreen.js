@@ -116,11 +116,18 @@ class HomeScreen extends Component {
     </TouchableOpacity>
   );
   renderBottomList = ({item}) => (
-    <View style={styles.bottomListItem}>
-      <Image source={{uri: item.image}} style={styles.bottomImage} />
-      <Text style={styles.bottomTitle}>{item.title}</Text>
-      <Text style={styles.bottomPrice}>${item.price}</Text>
-    </View>
+    <TouchableOpacity onPress={() => this.showProductDetails(item)}>
+      <View style={styles.bottomListItem}>
+        <Image source={{uri: item.image}} style={styles.bottomImage} />
+        <Text style={styles.bottomTitle}>{item.title}</Text>
+        <Text style={styles.bottomPrice}>${item.price}</Text>
+        <TouchableOpacity
+          onPress={() => this.trackAddToCart(item)}
+          style={styles.addToCart}>
+          <Text style={styles.addToCartButtonText}>Add to Cart</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
   );
   render() {
     const {route} = this.props;
@@ -277,7 +284,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'green',
     right: 15,
-    bottom: 15,
+    bottom: 35,
     position: 'absolute',
   },
   addToCartButton: {
@@ -289,6 +296,17 @@ const styles = StyleSheet.create({
     width: 55,
     bottom: 5,
     left: 10,
+    position: 'absolute',
+  },
+  addToCart: {
+    // marginTop: 8,
+    backgroundColor: '#1E90FF',
+    padding: 2,
+    borderRadius: 5,
+    height: 20,
+    width: 55,
+    bottom: 10,
+    right: 10,
     position: 'absolute',
   },
   addToCartButtonText: {

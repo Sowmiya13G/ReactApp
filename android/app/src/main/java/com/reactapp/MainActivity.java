@@ -1,107 +1,108 @@
 package com.reactapp;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.net.Uri;
-import android.os.Bundle; 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
-import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
-import com.facebook.react.defaults.DefaultReactActivityDelegate;
+import com.facebook.react.ReactPackage;
+import com.facebook.react.shell.MainReactPackage;
+import com.facebook.react.modules.core.PermissionAwareActivity;
+import com.facebook.react.modules.core.PermissionListener;
 import io.invertase.firebase.crashlytics.ReactNativeFirebaseCrashlyticsNativeHelper;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 
-public class MainActivity extends ReactActivity {
+import java.util.Arrays;
+import java.util.List;
 
-  /**
-   * Returns the name of the main component registered from JavaScript. This is used to schedule
-   * rendering of the component.
-   */
-  @Override
-  protected String getMainComponentName() {
-    return "ReactApp";
-  }
+public class MainActivity extends ReactActivity implements PermissionAwareActivity {
 
-  /**
-   * Returns the instance of the {@link ReactActivityDelegate}. Here we use a util class {@link
-   * DefaultReactActivityDelegate} which allows you to easily enable Fabric and Concurrent React
-   * (aka React 18) with two boolean flags.
-   */
-  @Override
-  protected ReactActivityDelegate createReactActivityDelegate() {
-    return new DefaultReactActivityDelegate(
-        this,
-        getMainComponentName(),
-        // If you opted-in for the New Architecture, we enable the Fabric Renderer.
-        DefaultNewArchitectureEntryPoint.getFabricEnabled());
-  }
-   // Example of handling non-fatal exceptions
-  private void handleNonFatalException(Exception e) {
-      // Log the exception to Crashlytics
-      ReactNativeFirebaseCrashlyticsNativeHelper.recordNativeException(e);
+    private PermissionListener permissionListener;
+
+    @Override
+    protected String getMainComponentName() {
+        return "ReactApp";
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-      super.onCreate(null);
+    protected ReactActivityDelegate createReactActivityDelegate() {
+        return new ReactActivityDelegate(this, getMainComponentName()) {
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
 
-  // Initialize Firebase Dynamic Links and handle deep links
-    FirebaseDynamicLinks.getInstance().getDynamicLink(getIntent())
-        .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
-          @Override
-          public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-            // Handle the dynamic link here
-            Uri deepLink = null;
-            if (pendingDynamicLinkData != null) {
-              deepLink = pendingDynamicLinkData.getLink();
+                // Initialize Firebase Dynamic Links and handle deep links
+                FirebaseDynamicLinks.getInstance().getDynamicLink(getIntent())
+                    .addOnSuccessListener(MainActivity.this, pendingDynamicLinkData -> {
+                        // Handle the dynamic link here
+                        Uri deepLink = null;
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.getLink();
+                        }
+                        // Handle the deep link (e.g., open specific content)
+                        handleDeepLink(deepLink);
+                    })
+                    .addOnFailureListener(MainActivity.this, e -> {
+                        // Handle failure here
+                    });
             }
-            // Handle the deep link (e.g., open specific content)
-            handleDeepLink(deepLink);
-          }
-        })
-        .addOnFailureListener(this, new OnFailureListener() {
-          @Override
-          public void onFailure(@NonNull Exception e) {
-            Log.w(TAG, "getDynamicLink:onFailure", e);
-          }
-        });
-  }
 
-  // Implement your deep link handling logic here
-  private void handleDeepLink(Uri deepLink) {
-    if (deepLink != null) {
-      // Parse and process the deep link URL here
-      String deepLinkString = deepLink.toString();
-
-      // Depending on the deep link structure, you can perform specific actions
-      if (deepLinkString.contains("nandhini.page.link/login")) {
-        // Open a specific activity or fragment
-        openSomePageActivity();
-      } else if (deepLinkString.contains("nandhini.page.link/signup")) {
-        // Open another activity or fragment
-        openAnotherPageActivity();
-      } else {
-        // Handle other cases or show a default page
-        openDefaultActivity();
-      }
+            @Override
+            public void onActivityResult(int requestCode, int resultCode, Intent data) {
+                super.onActivityResult(requestCode, resultCode, data);
+                if (getReactInstanceManager() != null) {
+                    getReactInstanceManager().onActivityResult(MainActivity.this, requestCode, resultCode, data);
+                }
+            }
+        };
     }
-  }
 
-  // Implement your activity-opening logic here
-  private void openSomePageActivity() {
-    // Open the activity for "example.com/somepage"
-    // You can start a new activity or fragment here
-  }
+    // Implement your deep link handling logic here
+    private void handleDeepLink(Uri deepLink) {
+        if (deepLink != null) {
+            String scheme = deepLink.getScheme();
+            String host = deepLink.getHost();
+            String path = deepLink.getPath();
 
-  private void openAnotherPageActivity() {
-    // Open the activity for "example.com/anotherpage"
-    // You can start a new activity or fragment here
-  }
+            if ("reactapp".equals(scheme) && "example.com".equals(host) && "/login".equals(path)) {
+                // This is a deep link to the /login path of example.com with the reactapp scheme.
+                // Handle it accordingly, e.g., open a login page.
+                openLoginPage();
+            }
+        }
+    }
 
-  private void openDefaultActivity() {
-    // Handle other cases or show a default page
-  }
+    private void openLoginPage() {
+        // Handle the deep link to the login page, e.g., navigate to the login screen.
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (getIntent() != null) {
+            setIntent(intent); // Update the current intent with the new intent.
+        }
+    }
+
+    @Override
+    public void requestPermissions(String[] permissions, int requestCode, PermissionListener listener) {
+        permissionListener = listener;
+        requestPermissions(permissions, requestCode);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (permissionListener != null) {
+            permissionListener.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    // @Override
+    protected List<ReactPackage> getPackages() {
+        return Arrays.<ReactPackage>asList(
+            new MainReactPackage()
+            // Add other React packages here if needed
+        );
+    }
 }
