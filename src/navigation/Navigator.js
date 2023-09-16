@@ -18,10 +18,7 @@ const linking = {
   config: {
     screens: {
       LogInScreen: {
-        path: 'loginscreen',
-      },
-      SignUpScreen: {
-        path: 'signupscreen/:id',
+        path: 'login',
       },
     },
   },
@@ -47,10 +44,10 @@ class Navigator extends Component {
   }
   handleDeepLink = async event => {
     const {path, queryParams} = linking.parse(event.url);
-    if (path === 'signup') {
+    if (path === 'login') {
       // Extract parameters from queryParams and navigate to DetailsScreen
       const {id} = queryParams;
-      this.props.navigation.navigate('signup', {id});
+      this.props.navigation.navigate('login', {id});
     }
   };
   checkAuthentication = async () => {
