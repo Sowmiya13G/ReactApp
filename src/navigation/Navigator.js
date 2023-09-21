@@ -12,12 +12,9 @@ import LogInScreen from '../screens/LogInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import SetPasswordScreen from '../screens/SetPasswordScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import ProductScreen from '../screens/ProductScreen';
-import PriceScreen from '../screens/PriceScreen';
+import BottomTabBarNav from './BottomTabBarNav';
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
 const linking = {
   prefixes: ['https://reactapp.com', 'reactapp://'],
   config: {
@@ -124,7 +121,7 @@ class Navigator extends Component {
           />
           <Stack.Screen
             name="HomeScreen"
-            component={HomeScreen}
+            component={BottomTabBarNav}
             options={{
               title: '',
               headerShown: false,
@@ -146,35 +143,10 @@ class Navigator extends Component {
               headerShown: false,
             }}
           />
-          <Stack.Screen
-            name="ProfileScreen"
-            component={ProfileScreen}
-            options={{
-              title: '',
-              headerShown: false,
-            }}
-          />
-          {/* <Stack.Screen
-            name="HomeScreen"
-            component={this.createTabNavigator}
-            options={{
-              title: '',
-              headerShown: false,
-            }}
-          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     );
   }
-  // createTabNavigator = () => {
-  //   return (
-  //     <Tab.Navigator>
-  //       <Tab.Screen name="Home" component={HomeScreen} />
-  //       <Tab.Screen name="Products" component={ProductScreen} />
-  //       <Tab.Screen name="Price" component={PriceScreen} />
-  //     </Tab.Navigator>
-  //   );
-  // };
 }
 export default Navigator;
 
