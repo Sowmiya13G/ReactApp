@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import BottomDesign from '../components/BottomDesign/BottomDesign';
 import CustomButton from '../components/Buttons/CustomButton';
 
 class ProfileScreen extends Component {
@@ -60,8 +59,8 @@ class ProfileScreen extends Component {
             <Text style={styles.text}>
               Mobile Number: {userDetails.mobileNumber}
             </Text>
-            <Text style={styles.text}>First Name: {userDetails.firstName}</Text>
-            <Text style={styles.text}>Last Name: {userDetails.lastName}</Text>
+            {/* <Text style={styles.text}>First Name: {userDetails.firstName}</Text>
+            <Text style={styles.text}>Last Name: {userDetails.lastName}</Text> */}
             <Text style={styles.text}>
               Designation: {userDetails.designation}
             </Text>
@@ -78,9 +77,6 @@ class ProfileScreen extends Component {
             label="LOG OUT"
             handlePress={this.goToLogOut}
           />
-        </View>
-        <View style={styles.bottom}>
-          <BottomDesign />
         </View>
       </View>
     );
@@ -113,12 +109,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'black',
     marginBottom: 15,
-  },
-  bottom: {
-    bottom: 0,
-    width: '100%',
-    height: 100,
-    position: 'absolute',
   },
   button: {
     width: '60%',

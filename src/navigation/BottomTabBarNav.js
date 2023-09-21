@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+
 // import screens for bottom tab bar
 import HomeScreen from '../screens/HomeScreen';
 import PriceScreen from '../screens/PriceScreen';
@@ -10,27 +12,62 @@ const Tab = createBottomTabNavigator();
 
 export class BottomTabBarNav extends Component {
   render() {
+    const {userName} = this.props.route.params;
     return (
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={({route}) => ({
+          tabBarIcon: ({
+            focused,
+            color,
+            size,
+            activeTintColor,
+            inactiveTintColor,
+          }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = focused ? 'home' : 'home';
+            } else if (route.name === 'Price') {
+              iconName = focused ? 'dollor-sign' : 'dollor-sign';
+            } else if (route.name === 'Shop') {
+              iconName = focused ? 'shopping-cart' : 'shopping-cart';
+            } else if (route.name === 'Profile') {
+              iconName = focused ? 'user' : 'user';
+            }
+            return (
+              <FontAwesome5Icon
+                name={iconName}
+                size={size}
+                color={color}
+                activeTintColor={activeTintColor}
+                inactiveTintColor={inactiveTintColor}
+              />
+            );
+          },
+        })}>
         <Tab.Screen
           name="HomeScreen"
           component={HomeScreen}
-          options={{tabBarLabel: 'Home', tabBarIcon: 'home'}}
+          initialParams={{userName: userName}}
+          options={{tabBarLabel: 'Home', title: '', headerShown: false}}
         />
         <Tab.Screen
           name="PriceScreen"
           component={PriceScreen}
-          options={{tabBarLabel: 'Price', tabBarIcon: 'price'}}
+          initialParams={{userName: userName}}
+          options={{tabBarLabel: 'Price', headerShown: false}}
         />
         <Tab.Screen
           name="ShopScreen"
           component={ShopScreen}
-          options={{tabBarLabel: 'Shop', tabBarIcon: 'shop'}}
+          initialParams={{userName: userName}}
+          options={{tabBarLabel: 'Shop', headerShown: false}}
         />
         <Tab.Screen
           name="ProfileScreen"
           component={ProfileScreen}
-          options={{tabBarLabel: 'Profile', tabBarIcon: 'user'}}
+          initialParams={{userName: userName}}
+          options={{tabBarLabel: 'Profile', headerShown: false}}
         />
       </Tab.Navigator>
     );

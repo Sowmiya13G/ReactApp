@@ -4,10 +4,7 @@ import React, {Component} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
 import WelcomeScreen from '../screens/WelcomeScreen';
-import HomeScreen from '../screens/HomeScreen';
 import LogInScreen from '../screens/LogInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import DetailsScreen from '../screens/DetailsScreen';
@@ -32,6 +29,7 @@ class Navigator extends Component {
     this.state = {
       authenticated: false,
       checkedAuthentication: false,
+      userName: '',
     };
   }
   componentDidMount() {
@@ -52,24 +50,32 @@ class Navigator extends Component {
       this.props.navigation.navigate('login', {id});
     }
   };
-  checkAuthentication = async () => {
+  async checkAuthentication() {
     try {
       const userDataJSON = await AsyncStorage.getItem('userData');
       console.log('userDataJSON:', userDataJSON); // Debug: Log user data
 
       if (userDataJSON) {
-        const userData = JSON.parse(userDataJSON);
-        console.log('Parsed userData:', userData); // Debug: Log parsed user data
+        const userDataArray = JSON.parse(userDataJSON);
+        console.log('Parsed userDataArray:', userDataArray); // Debug: Log parsed user data array
 
-        const userName = userData.userName;
-        console.log('userName:', userName); // Debug: Log userName
+        // You need to find the specific user details and extract the userName
+        // For example, if you want to use the first user's userName:
+        if (userDataArray.length > 0) {
+          const userName = userDataArray[0].userName;
+          console.log('userName:', userName); // Debug: Log userName
 
-        if (userName) {
-          // If userName exists, consider the user as authenticated
-          this.setState({authenticated: true});
-          console.log('User is authenticated with userName:', userName);
+          if (userName) {
+            // If userName exists, consider the user as authenticated
+            this.setState({authenticated: true, userName});
+            console.log('User is authenticated with userName:', userName);
+          } else {
+            // If userName doesn't exist, the user is not authenticated
+            this.setState({authenticated: false});
+            console.log('User is not authenticated');
+          }
         } else {
-          // If userName doesn't exist, the user is not authenticated
+          // If user details array is empty, the user is not authenticated
           this.setState({authenticated: false});
           console.log('User is not authenticated');
         }
@@ -83,7 +89,7 @@ class Navigator extends Component {
     } catch (error) {
       console.error('Error checking authentication:', error);
     }
-  };
+  }
 
   render() {
     const {authenticated, checkedAuthentication} = this.state;
@@ -94,7 +100,9 @@ class Navigator extends Component {
     return (
       <NavigationContainer linking={linking}>
         <Stack.Navigator
-          initialRouteName={authenticated ? 'TabNavigator' : 'WelcomeScreen'}>
+          initialRouteName={
+            authenticated ? 'BottomTabBarNav' : 'WelcomeScreen'
+          }>
           <Stack.Screen
             name="WelcomeScreen"
             component={WelcomeScreen}
@@ -120,14 +128,6 @@ class Navigator extends Component {
             }}
           />
           <Stack.Screen
-            name="HomeScreen"
-            component={BottomTabBarNav}
-            options={{
-              title: '',
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
             name="DetailsScreen"
             component={DetailsScreen}
             options={{
@@ -143,23 +143,21 @@ class Navigator extends Component {
               headerShown: false,
             }}
           />
+          <Stack.Screen
+            name="BottomTabBarNav"
+            component={BottomTabBarNav}
+            initialParams={{userName: this.state.userName}}
+            options={{
+              title: '',
+              headerShown: false,
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );
   }
 }
 export default Navigator;
-
-// Define a separate component for the TabNavigator
-// TabNavigator = () => {
-//   return (
-//     <Tab.Navigator>
-//       <Tab.Screen name="HomeScreen" component={HomeScreen} />
-//       <Tab.Screen name="ProductScreen" component={ProductScreen} />
-//       <Tab.Screen name="PriceScreen" component={PriceScreen} />
-//     </Tab.Navigator>
-//   );
-// };
 
 // checkAuthentication = async () => {
 //   try {
@@ -187,6 +185,39 @@ export default Navigator;
 //       this.setState({authenticated: false});
 //       console.log('User is not authenticated');
 //     }
+//   } catch (error) {
+//     console.error('Error checking authentication:', error);
+//   }
+// };
+
+// checkAuthentication = async () => {
+//   try {
+//     const userDataJSON = await AsyncStorage.getItem('userData');
+//     console.log('userDataJSON:', userDataJSON); // Debug: Log user data
+
+//     if (userDataJSON) {
+//       const userData = JSON.parse(userDataJSON);
+//       console.log('Parsed userData:', userData); // Debug: Log parsed user data
+
+//       const userName = userData.userName;
+//       console.log('userName:', userName); // Debug: Log userName
+
+//       if (userName) {
+//         // If userName exists, consider the user as authenticated
+//         this.setState({authenticated: true});
+//         console.log('User is authenticated with userName:', userName);
+//       } else {
+//         // If userName doesn't exist, the user is not authenticated
+//         this.setState({authenticated: false});
+//         console.log('User is not authenticated');
+//       }
+//     } else {
+//       // If user details don't exist, the user is not authenticated
+//       this.setState({authenticated: false});
+//       console.log('User is not authenticated');
+//     }
+//     // Set checkedAuthentication to true to indicate that authentication check is complete
+//     this.setState({checkedAuthentication: true});
 //   } catch (error) {
 //     console.error('Error checking authentication:', error);
 //   }

@@ -52,14 +52,14 @@ class HomeScreen extends Component {
       });
   }
 
-  goToProfile = () => {
-    const {userName, userDetails} = this.props.route.params;
-    // const {userDetails} = this.state;
-    this.props.navigation.navigate('ProfileScreen', {
-      userName,
-      userDetails,
-    });
-  };
+  // goToProfile = () => {
+  //   const {userName, userDetails} = this.props.route.params;
+  //   // const {userDetails} = this.state;
+  //   this.props.navigation.navigate('ProfileScreen', {
+  //     userName,
+  //     userDetails,
+  //   });
+  // };
 
   // Function to show the product details modal
   showProductDetails = product => {
@@ -137,16 +137,16 @@ class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>HELLO USER</Text>
-          <View style={styles.profile}>
+          <Text style={styles.title}>Hello</Text>
+          <Text style={styles.text}>{userName ? userName : 'hi'}</Text>
+          {/* <View style={styles.profile}>
             <TouchableOpacity onPress={this.goToProfile}>
               <Image
                 source={require('./../assets/images/user.png')}
                 style={styles.logo}
               />
             </TouchableOpacity>
-            <Text style={styles.text}>{userName ? userName : 'hi'}</Text>
-          </View>
+          </View> */}
         </View>
         <View style={styles.apiContainer}>
           <Text style={styles.sectionTitle}>Top List (Fetch method)</Text>
@@ -190,22 +190,13 @@ const styles = StyleSheet.create({
   },
   header: {
     top: 30,
-    justifyContent: 'space-around',
+    // justifyContent: 'space-around',
+    left: 20,
     flexDirection: 'row',
-  },
-  logo: {
-    top: 4,
-    height: 21,
-    width: 21,
-  },
-  profile: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    // width: 100,
   },
   text: {
-    fontSize: 20,
-    color: 'black',
+    fontSize: 25,
+    color: '#1909f5',
     left: 5,
   },
   title: {

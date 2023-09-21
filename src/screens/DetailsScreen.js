@@ -20,8 +20,8 @@ class DetailsScreen extends Component {
       userName: this.props.route.params.userName,
       email: this.props.route.params.email,
       mobileNumber: this.props.route.params.mobileNumber,
-      firstName: '',
-      lastName: '',
+      // firstName: '',
+      // lastName: '',
       designation: '',
       company: '',
       address: '',
@@ -62,8 +62,8 @@ class DetailsScreen extends Component {
     const {userName} = this.props.route.params;
     const {
       newDetails,
-      firstName,
-      lastName,
+      // firstName,
+      // lastName,
       designation,
       company,
       address,
@@ -85,8 +85,8 @@ class DetailsScreen extends Component {
           // Merge new details with existing details
           const updatedUser = {
             ...userData[userIndex],
-            firstName,
-            lastName,
+            // firstName,
+            // lastName,
             designation,
             company,
             address,
@@ -109,8 +109,8 @@ class DetailsScreen extends Component {
           this.setState({
             userDetails: updatedUser,
             newDetails: {},
-            firstName: '',
-            lastName: '',
+            // firstName: '',
+            // lastName: '',
             designation: '',
             company: '',
             address: '',
@@ -164,7 +164,7 @@ class DetailsScreen extends Component {
                 value={mobileNumber}
                 onChangeText={text => this.setState({mobileNumber: text})}
               />
-              <Text style={styles.title}>First Name</Text>
+              {/* <Text style={styles.title}>First Name</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Enter your designation"
@@ -179,7 +179,7 @@ class DetailsScreen extends Component {
                 placeholderTextColor="gray"
                 value={this.state.lastName}
                 onChangeText={text => this.setState({lastName: text})}
-              />
+              /> */}
               <Text style={styles.title}>Designation</Text>
               <TextInput
                 style={styles.input}
