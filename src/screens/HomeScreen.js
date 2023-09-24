@@ -189,19 +189,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   header: {
-    top: 30,
-    // justifyContent: 'space-around',
+    top: 25,
     left: 20,
     flexDirection: 'row',
   },
   text: {
     fontSize: 25,
     color: '#1909f5',
-    left: 5,
+    left: 25,
   },
   title: {
     fontSize: 25,
     color: '#000000',
+    left: 20,
   },
   apiContainer: {
     flex: 1,

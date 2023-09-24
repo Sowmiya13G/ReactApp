@@ -25,13 +25,13 @@ export class BottomTabBarNav extends Component {
           }) => {
             let iconName;
 
-            if (route.name === 'Home') {
+            if (route.name === 'HomeScreen') {
               iconName = focused ? 'home' : 'home';
-            } else if (route.name === 'Price') {
+            } else if (route.name === 'PriceScreen') {
               iconName = focused ? 'dollor-sign' : 'dollor-sign';
-            } else if (route.name === 'Shop') {
+            } else if (route.name === 'ShopScreen') {
               iconName = focused ? 'shopping-cart' : 'shopping-cart';
-            } else if (route.name === 'Profile') {
+            } else if (route.name === 'ProfileScreen') {
               iconName = focused ? 'user' : 'user';
             }
             return (
