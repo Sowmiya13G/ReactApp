@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -16,33 +17,27 @@ export class BottomTabBarNav extends Component {
     return (
       <Tab.Navigator
         screenOptions={({route}) => ({
-          tabBarIcon: ({
-            focused,
-            color,
-            size,
-            activeTintColor,
-            inactiveTintColor,
-          }) => {
+          tabBarIcon: ({focused, color, size}) => {
             let iconName;
 
             if (route.name === 'HomeScreen') {
               iconName = focused ? 'home' : 'home';
             } else if (route.name === 'PriceScreen') {
-              iconName = focused ? 'dollor-sign' : 'dollor-sign';
+              iconName = focused ? 'dollar-sign' : 'dollar-sign';
             } else if (route.name === 'ShopScreen') {
               iconName = focused ? 'shopping-cart' : 'shopping-cart';
             } else if (route.name === 'ProfileScreen') {
               iconName = focused ? 'user' : 'user';
             }
-            return (
-              <FontAwesome5Icon
-                name={iconName}
-                size={size}
-                color={color}
-                activeTintColor={activeTintColor}
-                inactiveTintColor={inactiveTintColor}
-              />
-            );
+            if (iconName) {
+              return (
+                <FontAwesome5Icon
+                  name={iconName}
+                  size={size}
+                  color={focused ? 'blue' : 'gray'}
+                />
+              );
+            }
           },
         })}>
         <Tab.Screen
@@ -55,19 +50,19 @@ export class BottomTabBarNav extends Component {
           name="PriceScreen"
           component={PriceScreen}
           initialParams={{userName: userName}}
-          options={{tabBarLabel: 'Price', headerShown: false}}
+          options={{tabBarLabel: 'Price', title: '', headerShown: false}}
         />
         <Tab.Screen
           name="ShopScreen"
           component={ShopScreen}
           initialParams={{userName: userName}}
-          options={{tabBarLabel: 'Shop', headerShown: false}}
+          options={{tabBarLabel: 'Shop', title: '', headerShown: false}}
         />
         <Tab.Screen
           name="ProfileScreen"
           component={ProfileScreen}
           initialParams={{userName: userName}}
-          options={{tabBarLabel: 'Profile', headerShown: false}}
+          options={{tabBarLabel: 'Profile', title: '', headerShown: false}}
         />
       </Tab.Navigator>
     );

@@ -1,16 +1,17 @@
-import {StyleSheet, Linking} from 'react-native';
+import {Linking} from 'react-native';
 import React, {Component} from 'react';
-
+import {Button} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+
 import WelcomeScreen from '../screens/WelcomeScreen';
 import LogInScreen from '../screens/LogInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import SetPasswordScreen from '../screens/SetPasswordScreen';
 import BottomTabBarNav from './BottomTabBarNav';
-
+import DrawerNav from './DrawerNav';
 const Stack = createStackNavigator();
 const linking = {
   prefixes: ['https://reactapp.com', 'reactapp://'],
@@ -100,9 +101,7 @@ class Navigator extends Component {
     return (
       <NavigationContainer linking={linking}>
         <Stack.Navigator
-          initialRouteName={
-            authenticated ? 'BottomTabBarNav' : 'WelcomeScreen'
-          }>
+          initialRouteName={authenticated ? 'HomeScreen' : 'WelcomeScreen'}>
           <Stack.Screen
             name="WelcomeScreen"
             component={WelcomeScreen}
@@ -144,8 +143,8 @@ class Navigator extends Component {
             }}
           />
           <Stack.Screen
-            name="BottomTabBarNav"
-            component={BottomTabBarNav}
+            name="HomeScreen"
+            component={DrawerNav}
             initialParams={{userName: this.state.userName}}
             options={{
               title: '',
