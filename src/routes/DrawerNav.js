@@ -13,7 +13,14 @@ class DrawerNav extends Component {
   render() {
     const {userName} = this.props.route.params;
     return (
-      <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          drawerStyle: {
+            backgroundColor: '#ffeb66',
+            // width: 240,
+          },
+        }}>
         <Drawer.Screen
           name="Home"
           component={BottomTabBarNav}

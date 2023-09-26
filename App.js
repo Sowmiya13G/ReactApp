@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Navigator from './src/navigation/Navigator';
+import Navigator from './src/routes/Navigator';
 import {
   requestUserPermission,
   setupFCMListeners,

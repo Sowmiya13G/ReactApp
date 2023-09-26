@@ -1,6 +1,5 @@
 import {Linking} from 'react-native';
 import React, {Component} from 'react';
-import {Button} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -54,14 +53,13 @@ class Navigator extends Component {
   async checkAuthentication() {
     try {
       const userDataJSON = await AsyncStorage.getItem('userData');
-      console.log('userDataJSON:', userDataJSON); // Debug: Log user data
+      console.log('userDataJSON:', userDataJSON);
 
       if (userDataJSON) {
         const userDataArray = JSON.parse(userDataJSON);
-        console.log('Parsed userDataArray:', userDataArray); // Debug: Log parsed user data array
+        console.log('Parsed userDataArray:', userDataArray);
 
-        // You need to find the specific user details and extract the userName
-        // For example, if you want to use the first user's userName:
+        // specific user details and extract the userName
         if (userDataArray.length > 0) {
           const userName = userDataArray[0].userName;
           console.log('userName:', userName); // Debug: Log userName

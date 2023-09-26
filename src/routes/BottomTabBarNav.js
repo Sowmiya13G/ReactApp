@@ -17,6 +17,7 @@ export class BottomTabBarNav extends Component {
     return (
       <Tab.Navigator
         screenOptions={({route}) => ({
+          tabBarStyle: {backgroundColor: '#fbdb03', height: 60},
           tabBarIcon: ({focused, color, size}) => {
             let iconName;
 
@@ -34,7 +35,7 @@ export class BottomTabBarNav extends Component {
                 <FontAwesome5Icon
                   name={iconName}
                   size={size}
-                  color={focused ? 'blue' : 'gray'}
+                  color={focused ? 'black' : 'gray'}
                 />
               );
             }

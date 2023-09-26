@@ -12,24 +12,6 @@ export const requestUserPermission = async () => {
     await this.getFCMToken();
   }
 };
-
-// GetFCMTocken = async () => {
-//   let fcmtocken = await AsyncStorage.getItem('fcmtocken');
-//   console.log(fcmtocken, 'old tocken');
-//   if (!fcmtocken) {
-//     try {
-//       let fcmTokenObject = await messaging().getToken();
-
-//       if (fcmTokenObject && fcmTokenObject.token) {
-//         let fcmToken = fcmTokenObject.token;
-//         console.log(fcmToken, 'new tocken');
-//         await AsyncStorage.setItem('fcmtocken', JSON.stringify(fcmToken)); // Stringify the token
-//       }
-//     } catch (error) {
-//       console.log(error, 'error');
-//     }
-//   }
-// };
 getFCMToken = async () => {
   try {
     const token = await messaging().getToken();
@@ -88,3 +70,21 @@ export const setupFCMListeners = async () => {
 //   messaging().setBackgroundMessageHandler(async remoteMessage => {
 //     console.log('Message handled in the background!', remoteMessage);
 //   });
+
+// GetFCMTocken = async () => {
+//   let fcmtocken = await AsyncStorage.getItem('fcmtocken');
+//   console.log(fcmtocken, 'old tocken');
+//   if (!fcmtocken) {
+//     try {
+//       let fcmTokenObject = await messaging().getToken();
+
+//       if (fcmTokenObject && fcmTokenObject.token) {
+//         let fcmToken = fcmTokenObject.token;
+//         console.log(fcmToken, 'new tocken');
+//         await AsyncStorage.setItem('fcmtocken', JSON.stringify(fcmToken)); // Stringify the token
+//       }
+//     } catch (error) {
+//       console.log(error, 'error');
+//     }
+//   }
+// };
