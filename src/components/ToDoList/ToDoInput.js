@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Icons from 'react-native-vector-icons/MaterialIcons';
 
 class ToDoInput extends Component {
   constructor(props) {
@@ -36,7 +36,7 @@ class ToDoInput extends Component {
         />
         <TouchableOpacity onPress={() => this.handleAddTask()}>
           <View style={styles.button}>
-            <MaterialIcons name="keyboard-arrow-up" size={24} color="black" />
+            <Icons name="keyboard_arrow_up" size={24} color="black" />
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>

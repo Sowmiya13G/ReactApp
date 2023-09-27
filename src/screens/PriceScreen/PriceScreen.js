@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-
+import {View, Text} from 'react-native';
+import {styles} from './styles';
 export class PriceScreen extends Component {
   render() {
     return (
@@ -11,9 +11,4 @@ export class PriceScreen extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  text: {
-    color: '#000',
-  },
-});
 export default PriceScreen;

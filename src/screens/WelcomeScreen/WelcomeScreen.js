@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image} from 'react-native';
+import {View, Image} from 'react-native';
+import {styles} from './styles';
 import notifee from '@notifee/react-native';
-import CustomButton from '../components/Buttons/CustomButton';
-import BottomDesign from '../components/BottomDesign/BottomDesign';
+import CustomButton from '../../components/Buttons/CustomButton';
+import BottomDesign from '../../components/BottomDesign/BottomDesign';
 
 class WelcomeScreen extends Component {
   // navigation methods using props
@@ -45,7 +46,7 @@ class WelcomeScreen extends Component {
     return (
       <View style={styles.container}>
         <Image
-          source={require('./../assets/images/welcome.jpg')}
+          source={require('../../assets/images/welcome.jpg')}
           style={styles.logo}
         />
         <View style={styles.buttonView}>
@@ -67,27 +68,5 @@ class WelcomeScreen extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonView: {
-    width: '80%',
-  },
-  logo: {
-    height: 180,
-    width: 180,
-  },
-  bottom: {
-    bottom: 0,
-    width: '100%',
-    height: 100,
-    position: 'absolute',
-  },
-});
 
 export default WelcomeScreen;

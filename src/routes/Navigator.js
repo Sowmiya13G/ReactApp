@@ -4,11 +4,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import WelcomeScreen from '../screens/WelcomeScreen';
-import LogInScreen from '../screens/LogInScreen';
-import SignUpScreen from '../screens/SignUpScreen';
-import DetailsScreen from '../screens/DetailsScreen';
-import SetPasswordScreen from '../screens/SetPasswordScreen';
+import WelcomeScreen from '../screens/WelcomeScreen/WelcomeScreen';
+import LogInScreen from '../screens/LogInScreen/LogInScreen';
+import SignUpScreen from '../screens/SignUpScreen/SignUpScreen';
+import DetailsScreen from '../screens/DetailsScreen/DetailsScreen';
+import SetPasswordScreen from '../screens/SetPasswordScreen/SetPasswordScreen';
 import BottomTabBarNav from './BottomTabBarNav';
 import DrawerNav from './DrawerNav';
 const Stack = createStackNavigator();

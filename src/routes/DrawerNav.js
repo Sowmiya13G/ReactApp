@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {Image, Text, View} from 'react-native';
+import {createDrawerNavigator, DrawerItemList} from '@react-navigation/drawer';
 
 import Bills from '../screens/drawer/Bills';
 import Notification from '../screens/drawer/Notification';
@@ -7,19 +8,50 @@ import FindStore from '../screens/drawer/FindStore';
 import Profile from '../screens/drawer/Profile';
 import Settings from '../screens/drawer/Settings';
 import BottomTabBarNav from './BottomTabBarNav';
+
 const Drawer = createDrawerNavigator();
+
+const CustomDrawerContent = ({userName, ...props}) => (
+  <View style={{flex: 1, backgroundColor: '#ffeb66'}}>
+    <View
+      style={{
+        backgroundColor: '#ffeb66',
+        height: 70,
+        padding: 15,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        flexDirection: 'row',
+      }}>
+      <Image
+        source={require('../assets/images/user.png')}
+        style={{width: 50, height: 50, marginRight: 15}}
+      />
+      <Text style={{fontSize: 30, color: '#000'}}>{userName}</Text>
+    </View>
+    <DrawerItemList {...props} />
+  </View>
+);
 
 class DrawerNav extends Component {
   render() {
     const {userName} = this.props.route.params;
+
     return (
       <Drawer.Navigator
         initialRouteName="Home"
+        drawerContent={props => (
+          <CustomDrawerContent userName={userName} {...props} />
+        )}
         screenOptions={{
           drawerStyle: {
             backgroundColor: '#ffeb66',
             // width: 240,
           },
+          drawerLabelStyle: {
+            fontSize: 18,
+          },
+          activeTintColor: 'black',
+          inactiveTintColor: 'gray',
         }}>
         <Drawer.Screen
           name="Home"

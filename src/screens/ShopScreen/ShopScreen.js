@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Keyboard, ScrollView, StyleSheet, Text, View} from 'react-native';
-import ToDoInput from '../components/ToDoList/ToDoInput';
-import ToDoItem from '../components/ToDoList/ToDoItem';
+import {Keyboard, ScrollView, Text, View} from 'react-native';
+import {styles} from './styles';
+import ToDoInput from '../../components/ToDoList/ToDoInput';
+import ToDoItem from '../../components/ToDoList/ToDoItem';
 export class ShopScreen extends Component {
   constructor(props) {
     super(props);
@@ -44,24 +45,5 @@ export class ShopScreen extends Component {
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  heading: {
-    color: '#000',
-    fontSize: 20,
-    fontWeight: '600',
-    marginTop: 30,
-    marginBottom: 10,
-    marginLeft: 20,
-  },
-  scrollView: {
-    marginBottom: 70,
-  },
-  taskContainer: {
-    marginTop: 20,
-  },
-});
+
 export default ShopScreen;

@@ -4,17 +4,17 @@ import {
   Image,
   Text,
   View,
-  StyleSheet,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import {styles} from './styles';
 import crashlytics from '@react-native-firebase/crashlytics';
 
 // import packages
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import CustomButton from '../components/Buttons/CustomButton';
-import BottomDesign from '../components/BottomDesign/BottomDesign';
+import CustomButton from '../../components/Buttons/CustomButton';
+import BottomDesign from '../../components/BottomDesign/BottomDesign';
 
 class LogInScreen extends Component {
   constructor(props) {
@@ -89,7 +89,7 @@ class LogInScreen extends Component {
         <View style={styles.container}>
           <View style={styles.head}>
             <Image
-              source={require('./../assets/images/login.jpg')}
+              source={require('../../assets/images/login.jpg')}
               style={styles.logo}
             />
             <Text style={styles.logIn}>LOG IN</Text>
@@ -117,7 +117,9 @@ class LogInScreen extends Component {
                 style={styles.icon}
                 onPress={this.handlePasswordVisibility}>
                 <Icon
-                  name={this.state.showPassword ? 'eye' : 'eye-slash'} // Use FontAwesome icons 'eye' and 'eye-slash'
+                  name={
+                    this.state.showPassword ? 'visibility' : 'visibility_off'
+                  }
                   size={20}
                   color="grey"
                 />
@@ -149,84 +151,5 @@ class LogInScreen extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    backgroundColor: '#fff',
-    position: 'relative',
-  },
-  head: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logo: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 60,
-    marginBottom: 50,
-    height: 160,
-    width: 160,
-  },
-  logIn: {
-    fontSize: 40,
-    marginBottom: 20,
-    color: '#000000',
-    fontWeight: 'bold',
-  },
-  details: {
-    marginLeft: 30,
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 15,
-    marginBottom: 15,
-    left: 0,
-    color: '#000000',
-  },
-  input: {
-    width: '90%',
-    height: 40,
-    color: '#000000',
-    borderWidth: 1,
-    borderColor: '#000000',
-    backgroundColor: '#fff',
-    marginBottom: 10,
-    paddingRight: 10,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-  },
-  password: {
-    flexDirection: 'row',
-  },
-  icon: {
-    height: 20,
-    width: 20,
-    marginRight: 50,
-    right: '0%',
-    position: 'absolute',
-    marginVertical: 13,
-    marginTop: 5,
-    // marginBottom: 5,
-  },
-  forgot: {
-    alignItems: 'flex-end',
-    right: 30,
-    marginBottom: 30,
-  },
-  forgotText: {
-    color: '#000000',
-  },
-  buttonView: {
-    bottom: 0,
-    paddingLeft: 25,
-    paddingRight: 25,
-  },
-  bottom: {
-    bottom: 0,
-    width: '100%',
-    height: 100,
-  },
-});
 
 export default LogInScreen;

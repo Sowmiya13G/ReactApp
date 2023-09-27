@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Icons from 'react-native-vector-icons/MaterialIcons';
 class ToDoItem extends Component {
   render() {
     return (
@@ -11,12 +11,7 @@ class ToDoItem extends Component {
         <View style={styles.taskContainer}>
           <Text style={styles.task}>{this.props.task}</Text>
           <TouchableOpacity onPress={() => this.props.deleteTask()}>
-            <MaterialIcons
-              style={styles.delete}
-              name="delete"
-              size={18}
-              color="#fff"
-            />
+            <Icons style={styles.delete} name="delete" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
       </View>

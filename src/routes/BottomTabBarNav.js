@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 // import screens for bottom tab bar
-import HomeScreen from '../screens/HomeScreen';
-import PriceScreen from '../screens/PriceScreen';
-import ShopScreen from '../screens/ShopScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import HomeScreen from '../screens/HomeScreen/HomeScreen';
+import PriceScreen from '../screens/PriceScreen/PriceScreen';
+import ShopScreen from '../screens/ShopScreen/ShopScreen';
+import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,15 +24,15 @@ export class BottomTabBarNav extends Component {
             if (route.name === 'HomeScreen') {
               iconName = focused ? 'home' : 'home';
             } else if (route.name === 'PriceScreen') {
-              iconName = focused ? 'dollar-sign' : 'dollar-sign';
+              iconName = focused ? 'payments' : 'payments';
             } else if (route.name === 'ShopScreen') {
-              iconName = focused ? 'shopping-cart' : 'shopping-cart';
+              iconName = focused ? 'shopping_cart' : 'shopping_cart';
             } else if (route.name === 'ProfileScreen') {
-              iconName = focused ? 'user' : 'user';
+              iconName = focused ? 'manage_accounts' : 'manage_accounts';
             }
             if (iconName) {
               return (
-                <FontAwesome5Icon
+                <Icon
                   name={iconName}
                   size={size}
                   color={focused ? 'black' : 'gray'}
@@ -45,25 +45,49 @@ export class BottomTabBarNav extends Component {
           name="HomeScreen"
           component={HomeScreen}
           initialParams={{userName: userName}}
-          options={{tabBarLabel: 'Home', title: '', headerShown: false}}
+          options={{
+            tabBarLabel: 'Home',
+            title: '',
+            headerShown: false,
+            tabBarActiveTintColor: 'black',
+            tabBarInactiveTintColor: 'gray',
+          }}
         />
         <Tab.Screen
           name="PriceScreen"
           component={PriceScreen}
           initialParams={{userName: userName}}
-          options={{tabBarLabel: 'Price', title: '', headerShown: false}}
+          options={{
+            tabBarLabel: 'Price',
+            title: '',
+            headerShown: false,
+            tabBarActiveTintColor: 'black',
+            tabBarInactiveTintColor: 'gray',
+          }}
         />
         <Tab.Screen
           name="ShopScreen"
           component={ShopScreen}
           initialParams={{userName: userName}}
-          options={{tabBarLabel: 'Shop', title: '', headerShown: false}}
+          options={{
+            tabBarLabel: 'Shop',
+            title: '',
+            headerShown: false,
+            tabBarActiveTintColor: 'black',
+            tabBarInactiveTintColor: 'gray',
+          }}
         />
         <Tab.Screen
           name="ProfileScreen"
           component={ProfileScreen}
           initialParams={{userName: userName}}
-          options={{tabBarLabel: 'Profile', title: '', headerShown: false}}
+          options={{
+            tabBarLabel: 'Profile',
+            title: '',
+            headerShown: false,
+            tabBarActiveTintColor: 'black',
+            tabBarInactiveTintColor: 'gray',
+          }}
         />
       </Tab.Navigator>
     );
