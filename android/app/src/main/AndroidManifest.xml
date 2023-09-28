@@ -13,7 +13,9 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme='reactapp' android:host="example.com" android:pathPrefix="/login"/>
       </intent-filter>
-
+      <meta-data
+              android:name="android.app.splash_screen_layout"
+              android:resource="@layout/custom_splash" />
     </activity>
   </application>
 </manifest> 

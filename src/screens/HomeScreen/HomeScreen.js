@@ -51,16 +51,6 @@ class HomeScreen extends Component {
         console.error('Error fetching data', error);
       });
   }
-
-  // goToProfile = () => {
-  //   const {userName, userDetails} = this.props.route.params;
-  //   // const {userDetails} = this.state;
-  //   this.props.navigation.navigate('ProfileScreen', {
-  //     userName,
-  //     userDetails,
-  //   });
-  // };
-
   // Function to show the product details modal
   showProductDetails = product => {
     this.setState({
@@ -139,14 +129,6 @@ class HomeScreen extends Component {
         <View style={styles.header}>
           <Text style={styles.title}>Hello</Text>
           <Text style={styles.text}>{userName ? userName : 'hi'}</Text>
-          {/* <View style={styles.profile}>
-            <TouchableOpacity onPress={this.goToProfile}>
-              <Image
-                source={require('./../assets/images/user.png')}
-                style={styles.logo}
-              />
-            </TouchableOpacity>
-          </View> */}
         </View>
         <View style={styles.apiContainer}>
           <Text style={styles.sectionTitle}>Top List (Fetch method)</Text>
@@ -170,7 +152,6 @@ class HomeScreen extends Component {
             keyExtractor={item => item.id.toString()}
           />
         </View>
-        {/* Render the product details modal */}
         <ProductDetailsModal
           isVisible={this.state.isModalVisible}
           product={this.state.selectedProduct}

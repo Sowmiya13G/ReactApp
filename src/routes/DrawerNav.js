@@ -18,8 +18,6 @@ const CustomDrawerContent = ({userName, ...props}) => (
         backgroundColor: '#ffeb66',
         height: 70,
         padding: 15,
-        // justifyContent: 'center',
-        // alignItems: 'center',
         flexDirection: 'row',
       }}>
       <Image
@@ -45,7 +43,6 @@ class DrawerNav extends Component {
         screenOptions={{
           drawerStyle: {
             backgroundColor: '#ffeb66',
-            // width: 240,
           },
           drawerLabelStyle: {
             fontSize: 18,
