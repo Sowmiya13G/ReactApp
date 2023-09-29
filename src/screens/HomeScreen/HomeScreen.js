@@ -1,16 +1,14 @@
 import React, {Component} from 'react';
-import {
-  FlatList,
-  Image,
-  View,
-  TouchableOpacity,
-  Text,
-  Linking,
-} from 'react-native';
+import {FlatList, View, TouchableOpacity, Text} from 'react-native';
 import {styles} from './styles';
 import {fetchProductsUsingFetch, fetchProductsUsingAxios} from '../../api/api';
-import analytics from '@react-native-firebase/analytics';
-import ProductDetailsModal from '../../components/Modal/ProductDetails';
+import ProductDetailsModal from '../../components/Modal/ProductDetails/ProductDetails';
+import {
+  renderTopList,
+  renderBottomList,
+} from '../../components/Modal/ProductModal/ProductModal';
+import {trackAddToCart} from '../../services/firebase';
+import {openAmazonWebsite} from '../../services/linking';
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -34,7 +32,6 @@ class HomeScreen extends Component {
     if (userName) {
       this.setState({userName});
     }
-    // Fetch data from the API using the functions from api.js
     fetchProductsUsingFetch()
       .then(data => {
         this.setState({topList: data});
@@ -42,7 +39,6 @@ class HomeScreen extends Component {
       .catch(error => {
         console.error('Error fetching products', error);
       });
-
     fetchProductsUsingAxios()
       .then(data => {
         this.setState({bottomList: data});
@@ -51,7 +47,6 @@ class HomeScreen extends Component {
         console.error('Error fetching data', error);
       });
   }
-  // Function to show the product details modal
   showProductDetails = product => {
     this.setState({
       selectedProduct: product,
@@ -59,66 +54,20 @@ class HomeScreen extends Component {
     });
   };
 
-  // Function to close the product details modal
   closeProductDetails = () => {
     this.setState({
       selectedProduct: null,
       isModalVisible: false,
     });
   };
-  trackAddToCart = item => {
-    analytics()
-      .logEvent('add_to_cart', {
-        item_id: item.id,
-        item_name: item.title,
-        price: item.price,
-      })
-      .then(() => console.log('Add to Cart event tracked'))
-      .catch(error => console.error('Error tracking Add to Cart event', error));
+  onAddToCart = product => {
+    console.log('Product added to cart:', product);
   };
-  openAmazonWebsite() {
-    const amazonUrl = 'https://www.amazon.com'; // Replace with the Amazon URL you want to open
-    Linking.openURL(amazonUrl)
-      .then(() => {
-        console.log(`Opened Amazon website: ${amazonUrl}`);
-      })
-      .catch(error => {
-        console.error(`Error opening Amazon website: ${amazonUrl}`, error);
-      });
-  }
-
   // Function to show the notification using the NotificationService class
   showViewMoreNotificationHandler = () => {
     NotificationService.showViewMoreNotification();
   };
-  renderTopList = ({item}) => (
-    <TouchableOpacity onPress={() => this.showProductDetails(item)}>
-      <View style={styles.topListItem}>
-        <Image source={{uri: item.image}} style={styles.topImage} />
-        <Text style={styles.topTitle}>{item.title}</Text>
-        <Text style={styles.topPrice}>${item.price}</Text>
-        <TouchableOpacity
-          onPress={() => this.trackAddToCart(item)} // Add an item to cart on press
-          style={styles.addToCartButton}>
-          <Text style={styles.addToCartButtonText}>Add to Cart</Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
-  );
-  renderBottomList = ({item}) => (
-    <TouchableOpacity onPress={() => this.showProductDetails(item)}>
-      <View style={styles.bottomListItem}>
-        <Image source={{uri: item.image}} style={styles.bottomImage} />
-        <Text style={styles.bottomTitle}>{item.title}</Text>
-        <Text style={styles.bottomPrice}>${item.price}</Text>
-        <TouchableOpacity
-          onPress={() => this.trackAddToCart(item)}
-          style={styles.addToCart}>
-          <Text style={styles.addToCartButtonText}>Add to Cart</Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
-  );
+
   render() {
     const {route} = this.props;
     const {userName} = route.params;
@@ -135,20 +84,32 @@ class HomeScreen extends Component {
           <View style={styles.topList}>
             <FlatList
               data={topList}
-              renderItem={this.renderTopList}
+              renderItem={item =>
+                renderTopList({
+                  ...item,
+                  showProductDetails: this.showProductDetails,
+                  trackAddToCart: trackAddToCart,
+                })
+              }
               keyExtractor={item => item.id.toString()}
               horizontal={true}
             />
           </View>
           <View style={styles.bottomListTitleContainer}>
             <Text style={styles.sectionTitle}>Bottom List (Axios method)</Text>
-            <TouchableOpacity onPress={() => this.openAmazonWebsite()}>
+            <TouchableOpacity onPress={() => openAmazonWebsite()}>
               <Text style={styles.viewMoreButtonText}>View More</Text>
             </TouchableOpacity>
           </View>
           <FlatList
             data={bottomList}
-            renderItem={this.renderBottomList}
+            renderItem={item =>
+              renderBottomList({
+                ...item,
+                showProductDetails: this.showProductDetails,
+                trackAddToCart: trackAddToCart,
+              })
+            }
             keyExtractor={item => item.id.toString()}
           />
         </View>
@@ -156,7 +117,7 @@ class HomeScreen extends Component {
           isVisible={this.state.isModalVisible}
           product={this.state.selectedProduct}
           onClose={this.closeProductDetails}
-          onAddToCart={this.trackAddToCart}
+          onAddToCart={this.onAddToCart}
         />
       </View>
     );
@@ -164,24 +125,3 @@ class HomeScreen extends Component {
 }
 
 export default HomeScreen;
-
-// // Fetch data from api using fetch method
-// fetch(URL)
-//   .then(response => response.json())
-//   .then(data => {
-//     this.setState({topList: data});
-//   })
-//   .catch(error => {
-//     console.error('Error fetching products', error);
-//   });
-// // Fetch data from api using axios method
-// axios
-//   .get(URL)
-//   .then(response => {
-//     this.setState({bottomList: response.data});
-//   })
-//   .catch(error => {
-//     console.error('Error fetching data', error);
-//   });
-
-// navigation

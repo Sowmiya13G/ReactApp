@@ -6,7 +6,6 @@ import CustomButton from '../../components/Buttons/CustomButton';
 import BottomDesign from '../../components/BottomDesign/BottomDesign';
 
 class WelcomeScreen extends Component {
-  // navigation methods using props
   goToSignUp = () => {
     console.log('SIGN UP Button clicked');
     this.props.navigation.navigate('SignUpScreen');

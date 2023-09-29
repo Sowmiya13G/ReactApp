@@ -6,15 +6,18 @@ import {
   View,
   TextInput,
   ScrollView,
-  Alert,
 } from 'react-native';
 import {styles} from './styles';
-// import packages
-import AsyncStorage from '@react-native-async-storage/async-storage';
-// import custom components
 import CustomButton from '../../components/Buttons/CustomButton';
 import BottomDesign from '../../components/BottomDesign/BottomDesign';
-
+import {
+  validateEmail,
+  validateUserName,
+  validateMobileNumber,
+  validatePassword,
+  validatePasswordMatch,
+} from '../../utils/Validaion';
+import {saveUserDetails} from '../../asyncService/SaveUserDetails';
 class SignUpScreen extends Component {
   constructor(props) {
     super(props);
@@ -39,48 +42,14 @@ class SignUpScreen extends Component {
     const {email, userName, mobileNumber, password, confirmPassword} =
       this.state;
     const errors = {
-      email: '',
-      userName: '',
-      mobileNumber: '',
-      password: '',
-      confirmPassword: '',
+      email: validateEmail(email),
+      userName: validateUserName(userName),
+      mobileNumber: validateMobileNumber(mobileNumber),
+      password: validatePassword(password),
+      confirmPassword: validatePasswordMatch(password, confirmPassword),
     };
-
-    // Validation for email
-    if (!email.toLowerCase().includes('@gmail.com')) {
-      errors.email = 'Email should contain @gmail.com';
-    }
-
-    // Validation for username
-    const userNameRegex = /^[a-zA-Z0-9]*$/;
-    if (!userName.match(userNameRegex)) {
-      errors.userName = 'Username should consist only of alphabets';
-    }
-
-    // Validation for mobile number
-    const mobileNumberRegex = /^[0-9]+$/;
-    if (!mobileNumber.match(mobileNumberRegex)) {
-      errors.mobileNumber = 'Mobile number should contain numbers only';
-    }
-
-    // Validation for password
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if (!password.match(passwordRegex)) {
-      errors.password =
-        'Password must be 8 characters with letters and numbers';
-    }
-
-    // Validation for password match
-    if (password !== confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
-    }
-
-    // Set the errors state
-    this.setState({errors});
-
-    // Check if there are any errors
-    return Object.values(errors).every(error => error === '');
+    this.setState({errors}); // Set the errors state
+    return Object.values(errors).every(error => error === ''); // Check if there are any errors
   };
 
   handleSignUp = async () => {
@@ -92,7 +61,6 @@ class SignUpScreen extends Component {
       confirmPassword,
       usersData,
     } = this.state;
-
     // Create a user object with the details
     const userData = {
       email,
@@ -101,57 +69,30 @@ class SignUpScreen extends Component {
       password,
       confirmPassword,
     };
-
     try {
-      const userKey = email.toLowerCase();
-
-      const existingUsersData = await AsyncStorage.getItem('userData');
-      let updatedUsersData = [];
-
-      if (existingUsersData) {
-        updatedUsersData = JSON.parse(existingUsersData);
-      }
-
-      // Check if the user already exists based on the userKey (email)
-      const userExists = updatedUsersData.some(
-        user => user.email.toLowerCase() === userKey,
-      );
-
-      if (userExists) {
-        Alert.alert('User already exists');
-        return;
-      }
-
-      // Add the new user data to the array
-      updatedUsersData.push(userData);
-
-      // Save the updated user data to AsyncStorage
-      await AsyncStorage.setItem('userData', JSON.stringify(updatedUsersData));
-      Alert.alert('Sign up successful');
-      console.log(userData);
-
-      // Clear the form fields and errors
-      this.setState({
-        email: '',
-        userName: '',
-        mobileNumber: '',
-        password: '',
-        confirmPassword: '',
-        errors: {
+      const saved = await saveUserDetails(userData);
+      if (saved) {
+        this.setState({
           email: '',
           userName: '',
           mobileNumber: '',
           password: '',
           confirmPassword: '',
-        },
-        usersData: updatedUsersData, // Update the state with the new user data
-      });
-
-      this.props.navigation.navigate('DetailsScreen', {
-        userName,
-        email,
-        mobileNumber,
-      });
+          errors: {
+            email: '',
+            userName: '',
+            mobileNumber: '',
+            password: '',
+            confirmPassword: '',
+          },
+          usersData: saved,
+        });
+        this.props.navigation.navigate('DetailsScreen', {
+          userName,
+          email,
+          mobileNumber,
+        });
+      }
     } catch (error) {
       console.error('Error saving user details:', error);
     }
@@ -231,7 +172,8 @@ class SignUpScreen extends Component {
                 signUpButton
                 label="SIGN UP"
                 handlePress={() => {
-                  if (this.validateForm()) {
+                  // if (this.validateForm())
+                  {
                     this.handleSignUp();
                   }
                 }}

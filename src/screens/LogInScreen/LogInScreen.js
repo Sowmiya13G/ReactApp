@@ -8,14 +8,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {styles} from './styles';
-import crashlytics from '@react-native-firebase/crashlytics';
-
-// import packages
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../../components/Buttons/CustomButton';
 import BottomDesign from '../../components/BottomDesign/BottomDesign';
-
+import {authentication} from '../../asyncService/authentication';
 class LogInScreen extends Component {
   constructor(props) {
     super(props);
@@ -42,43 +38,15 @@ class LogInScreen extends Component {
   handleLogin = async () => {
     const {userName, password} = this.state;
 
-    try {
-      const userDataJSON = await AsyncStorage.getItem('userData');
+    const {success, user, error} = await authentication(userName, password);
 
-      if (userDataJSON) {
-        const userData = JSON.parse(userDataJSON);
-
-        // Find the user by username
-        const authenticatedUser = userData.find(
-          user => user.userName === userName && user.password === password,
-        );
-
-        if (authenticatedUser) {
-          // Authentication successful
-          // Pass the userName as a parameter to HomeScreen
-          this.props.navigation.navigate('HomeScreen', {
-            userName: authenticatedUser.userName,
-          });
-        } else {
-          console.error(
-            'Authentication failed. Incorrect username or password.',
-          );
-
-          // Log the authentication failure in Crashlytics
-          crashlytics().recordError(new Error(errorMessage));
-          console.error(errorMessage);
-        }
-      } else {
-        console.error('User data not found.');
-        // Log the missing user data in Crashlytics with an Error object
-        crashlytics().recordError(new Error(errorMessage));
-
-        console.error(errorMessage);
-      }
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-      // Log the error in Crashlytics
-      crashlytics().recordError(error);
+    if (success) {
+      this.props.navigation.navigate('HomeScreen', {
+        userName: user.userName,
+      });
+    } else {
+      // Handle the error as needed
+      this.setState({error});
     }
   };
 

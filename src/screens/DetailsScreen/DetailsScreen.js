@@ -12,7 +12,8 @@ import {styles} from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../../components/Buttons/CustomButton';
 import BottomDesign from '../../components/BottomDesign/BottomDesign';
-
+import {fetchUserDetails} from '../../asyncService/fetchUserDetails';
+import {handleSaveDetails} from '../../asyncService/SaveUserDetails';
 class DetailsScreen extends Component {
   constructor(props) {
     super(props);
@@ -20,114 +21,44 @@ class DetailsScreen extends Component {
       userName: this.props.route.params.userName,
       email: this.props.route.params.email,
       mobileNumber: this.props.route.params.mobileNumber,
-      // firstName: '',
-      // lastName: '',
       designation: '',
       company: '',
       address: '',
       location: '',
+      userDetails: null,
+      newDetails: {},
     };
   }
 
   componentDidMount() {
     const {userName, email, mobileNumber} = this.props.route.params;
     this.setState({userName, email, mobileNumber});
-    this.fetchUserDetails();
+    this.fetchUserDetails(userName);
   }
-  fetchUserDetails = async () => {
-    try {
-      // Retrieve the userName parameter from navigation props
-      const {route} = this.props;
-      const {userName} = route.params;
-
-      // Fetch user data from AsyncStorage
-      const userDataJSON = await AsyncStorage.getItem('userData');
-      if (userDataJSON) {
-        const userData = JSON.parse(userDataJSON);
-
-        // Find the user based on the userName
-        const userDetails = userData.find(user => user.userName === userName);
-
-        if (userDetails) {
-          this.setState({userDetails});
-        } else {
-          console.error('User not found');
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching user details:', error);
-    }
+  fetchUserDetails = async userName => {
+    fetchUserDetails(userName, userDetails => {
+      this.setState(userDetails);
+    });
   };
   handleSaveDetails = async () => {
     const {userName} = this.props.route.params;
-    const {
+    const {newDetails, designation, company, address, location} = this.state;
+    handleSaveDetails(
+      userName,
       newDetails,
-      // firstName,
-      // lastName,
       designation,
       company,
       address,
       location,
-    } = this.state;
-
-    try {
-      // Fetch existing user details from AsyncStorage
-      const userDataJSON = await AsyncStorage.getItem('userData');
-      if (userDataJSON) {
-        const userData = JSON.parse(userDataJSON);
-
-        // Find the user based on the userName
-        const userIndex = userData.findIndex(
-          user => user.userName === userName,
-        );
-
-        if (userIndex !== -1) {
-          // Merge new details with existing details
-          const updatedUser = {
-            ...userData[userIndex],
-            // firstName,
-            // lastName,
-            designation,
-            company,
-            address,
-            location,
-            ...newDetails, // Add other new details here if needed
-          };
-
-          userData[userIndex] = updatedUser;
-
-          // Save the updated user data back to AsyncStorage
-          await AsyncStorage.setItem('userData', JSON.stringify(userData));
-          console.log(userData);
-          Alert.alert('Details saved successfully');
-          // userName: this.state.userName;
-          this.props.navigation.navigate('HomeScreen', {
-            email: this.state.email, // Pass the user's email
-            userName,
-          });
-          // Update the state with the new details
-          this.setState({
-            userDetails: updatedUser,
-            newDetails: {},
-            // firstName: '',
-            // lastName: '',
-            designation: '',
-            company: '',
-            address: '',
-            location: '',
-          });
-        } else {
-          console.error('User not found');
-        }
-      }
-    } catch (error) {
-      console.error('Error saving user details:', error);
-    }
+      updatedState => {
+        this.setState(updatedState);
+      },
+      this.props.navigation,
+    );
   };
 
   render() {
-    const {userName, email, mobileNumber} = this.state;
-    const {userDetails, newDetails} = this.state;
+    const {userName, email, mobileNumber, userDetails, newDetails} = this.state;
     return (
       <SafeAreaView>
         <ScrollView>
@@ -164,22 +95,6 @@ class DetailsScreen extends Component {
                 value={mobileNumber}
                 onChangeText={text => this.setState({mobileNumber: text})}
               />
-              {/* <Text style={styles.title}>First Name</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your designation"
-                placeholderTextColor="gray"
-                value={this.state.firstName}
-                onChangeText={text => this.setState({firstName: text})}
-              />
-              <Text style={styles.title}>Last Name</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your designation"
-                placeholderTextColor="gray"
-                value={this.state.lastName}
-                onChangeText={text => this.setState({lastName: text})}
-              /> */}
               <Text style={styles.title}>Designation</Text>
               <TextInput
                 style={styles.input}
@@ -237,3 +152,57 @@ class DetailsScreen extends Component {
 }
 
 export default DetailsScreen;
+// handleSaveDetails = async () => {
+//   const {userName} = this.props.route.params;
+//   const {newDetails, designation, company, address, location} = this.state;
+
+//   try {
+//     // Fetch existing user details from AsyncStorage
+//     const userDataJSON = await AsyncStorage.getItem('userData');
+//     if (userDataJSON) {
+//       const userData = JSON.parse(userDataJSON);
+
+//       // Find the user based on the userName
+//       const userIndex = userData.findIndex(
+//         user => user.userName === userName,
+//       );
+
+//       if (userIndex !== -1) {
+//         // Merge new details with existing details
+//         const updatedUser = {
+//           ...userData[userIndex],
+//           designation,
+//           company,
+//           address,
+//           location,
+//           ...newDetails, // Add other new details here if needed
+//         };
+
+//         userData[userIndex] = updatedUser;
+
+//         // Save the updated user data back to AsyncStorage
+//         await AsyncStorage.setItem('userData', JSON.stringify(userData));
+//         console.log(userData);
+//         Alert.alert('Details saved successfully');
+//         // userName: this.state.userName;
+//         this.props.navigation.navigate('HomeScreen', {
+//           email: this.state.email, // Pass the user's email
+//           userName,
+//         });
+//         // Update the state with the new details
+//         this.setState({
+//           userDetails: updatedUser,
+//           newDetails: {},
+//           designation: '',
+//           company: '',
+//           address: '',
+//           location: '',
+//         });
+//       } else {
+//         console.error('User not found');
+//       }
+//     }
+//   } catch (error) {
+//     console.error('Error saving user details:', error);
+//   }
+// };

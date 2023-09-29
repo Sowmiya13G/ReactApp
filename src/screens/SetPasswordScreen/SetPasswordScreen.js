@@ -5,7 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // import screen components in navigation container
 import CustomButton from '../../components/Buttons/CustomButton';
 import BottomDesign from '../../components/BottomDesign/BottomDesign';
-
+import {handlePasswordUpdate} from '../../asyncService/handlePasswordUpdate';
+import {validateNewPassword} from '../../utils/Validaion';
 class SetPasswordScreen extends Component {
   constructor(props) {
     super(props);
@@ -23,68 +24,35 @@ class SetPasswordScreen extends Component {
     // Set the userName from the navigation parameter
     this.setState({userName});
   }
-  validateInputs = () => {
-    let isValid = true;
-    this.setState({error: ''});
 
-    const {newPassword, confirmPassword} = this.state;
-
-    // Validation for password (8 characters, mixed with numbers and alphabets)
-    const newPasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    if (!newPassword.match(newPasswordRegex)) {
-      this.setState({
-        error: 'Your password must be 8 characters with letters and numbers',
-      });
-      isValid = false;
-    }
-
-    // Validation for password match
-    if (newPassword !== confirmPassword) {
-      this.setState({error: 'Passwords do not match'});
-      isValid = false;
-    }
-
-    return isValid;
-  };
   handlePasswordUpdate = async () => {
     const {userName, newPassword, confirmPassword} = this.state;
-
-    // Add validation logic for password and confirmPassword as needed
-    if (newPassword === confirmPassword) {
-      try {
-        const userDataJSON = await AsyncStorage.getItem('userData');
-
-        if (userDataJSON) {
-          const userData = JSON.parse(userDataJSON);
-
-          // Find the user by username
-          const updatedUserData = userData.map(user => {
-            if (user.userName === userName) {
-              return {...user, password: newPassword};
-            }
-            return user;
-          });
-
-          await AsyncStorage.setItem(
-            'userData',
-            JSON.stringify(updatedUserData),
-          );
-
-          // Navigate to LogInScreen
-          this.props.navigation.navigate('LogInScreen');
-        } else {
-          console.error('User data not found.');
-        }
-      } catch (error) {
-        console.error('Error updating password:', error);
+    const {isValid, errors} = validateNewPassword({
+      newPassword,
+      confirmPassword,
+    });
+    if (isValid) {
+      const {success, error} = await handlePasswordUpdate({
+        userName,
+        newPassword,
+        confirmPassword,
+      });
+      if (success) {
+        // Password update was successful
+        // Navigate to the desired screen
+        this.props.navigation.navigate('LogInScreen');
+      } else {
+        // Handle the error as needed
+        this.setState({error});
       }
     } else {
-      console.error('Passwords do not match.');
+      // Handle validation errors
+      this.setState(errors);
     }
   };
 
   render() {
-    const {newPassword, confirmPassword} = this.state;
+    const {newPassword, confirmPassword, error} = this.state;
 
     return (
       <SafeAreaView>
@@ -121,7 +89,7 @@ class SetPasswordScreen extends Component {
               value={this.state.confirmPassword}
               onChangeText={text => this.setState({confirmPassword: text})}
             />
-            {/* <Text style={styles.error}>{error}</Text> */}
+            {error ? <Text style={styles.error}>{error}</Text> : null}
           </View>
           <View style={styles.buttonView}>
             <CustomButton
