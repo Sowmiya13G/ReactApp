@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {linking} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-
+import {messageService} from '../services/firebase';
 import WelcomeScreen from '../screens/WelcomeScreen/WelcomeScreen';
 import LogInScreen from '../screens/LogInScreen/LogInScreen';
 import SignUpScreen from '../screens/SignUpScreen/SignUpScreen';
@@ -32,7 +32,7 @@ class Navigator extends Component {
       userName,
       checkedAuthentication: true,
     });
-
+    messageService();
     // Listen for deep link events
     Linking.addEventListener('url', handleDeepLink);
   }

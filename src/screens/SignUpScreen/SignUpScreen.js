@@ -172,8 +172,7 @@ class SignUpScreen extends Component {
                 signUpButton
                 label="SIGN UP"
                 handlePress={() => {
-                  // if (this.validateForm())
-                  {
+                  if (this.validateForm()) {
                     this.handleSignUp();
                   }
                 }}

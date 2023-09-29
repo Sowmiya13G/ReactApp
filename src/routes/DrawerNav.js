@@ -5,8 +5,8 @@ import {createDrawerNavigator, DrawerItemList} from '@react-navigation/drawer';
 import Bills from '../screens/drawer/Bills';
 import Notification from '../screens/drawer/Notification';
 import FindStore from '../screens/drawer/FindStore';
-import Profile from '../screens/drawer/Profile';
 import Settings from '../screens/drawer/Settings';
+import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
 import BottomTabBarNav from './BottomTabBarNav';
 
 const Drawer = createDrawerNavigator();
@@ -83,11 +83,11 @@ class DrawerNav extends Component {
           }}
         />
         <Drawer.Screen
-          name="Profile"
-          component={Profile}
+          name="ProfileScreen"
+          component={ProfileScreen}
           initialParams={{userName: userName}}
           options={{
-            title: 'Profile',
+            title: 'ProfileScreen',
           }}
         />
         <Drawer.Screen
