@@ -52,11 +52,11 @@ export const styles = StyleSheet.create({
   icon: {
     height: 20,
     width: 20,
-    marginRight: 50,
+    marginRight: 40,
     right: '0%',
     position: 'absolute',
     marginVertical: 13,
-    marginTop: 5,
+    marginTop: 4,
     // marginBottom: 5,
   },
   forgot: {

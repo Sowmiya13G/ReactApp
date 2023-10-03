@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import Icons from 'react-native-vector-icons/MaterialIcons';
+import Icons from 'react-native-vector-icons/FontAwesome';
 
 class ToDoInput extends Component {
   constructor(props) {
@@ -31,12 +31,12 @@ class ToDoInput extends Component {
           style={styles.inputField}
           value={this.state.task}
           onChangeText={text => this.setState({task: text})}
-          placeholder={'Write a task'}
+          placeholder={'Enter the item'}
           placeholderTextColor={'gray'}
         />
         <TouchableOpacity onPress={() => this.handleAddTask()}>
           <View style={styles.button}>
-            <Icons name="keyboard_arrow_up" size={24} color="black" />
+            <Icons name="chevron-up" size={24} color="black" />
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#fbdb03',
     alignItems: 'center',
-    justifyContent: 'center',
+    alignSelf: 'center',
   },
 });
 

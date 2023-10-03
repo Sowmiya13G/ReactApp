@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert} from 'react-native';
-
+// SIGN UP SCREEN
 export const saveUserDetails = async userData => {
   try {
     const userKey = userData.email.toLowerCase();
@@ -12,7 +12,6 @@ export const saveUserDetails = async userData => {
       updatedUsersData = JSON.parse(existingUsersData);
     }
 
-    // Check if the user already exists based on the userKey (email)
     const userExists = updatedUsersData.some(
       user => user.email.toLowerCase() === userKey,
     );
@@ -28,7 +27,7 @@ export const saveUserDetails = async userData => {
     // Save the updated user data to AsyncStorage
     await AsyncStorage.setItem('userData', JSON.stringify(updatedUsersData));
     Alert.alert('Sign up successful');
-    console.log(updatedUsersData);
+    console.log('STORED USER DATA:', updatedUsersData);
     return true;
   } catch (error) {
     console.error('Error saving user details:', error);
@@ -36,6 +35,7 @@ export const saveUserDetails = async userData => {
   }
 };
 
+// DETAILS SCREEN
 export const handleSaveDetails = async (
   userName,
   newDetails,
@@ -62,7 +62,7 @@ export const handleSaveDetails = async (
         };
         userData[userIndex] = updatedUser;
         await AsyncStorage.setItem('userData', JSON.stringify(userData));
-        console.log(userData);
+        console.log('MERGED DETAILS:', userData);
         Alert.alert('Details saved successfully');
         navigation.navigate('HomeScreen', {
           email: updatedUser.email,

@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 // import screens for bottom tab bar
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import PriceScreen from '../screens/PriceScreen/PriceScreen';
@@ -24,11 +23,11 @@ export class BottomTabBarNav extends Component {
             if (route.name === 'HomeScreen') {
               iconName = focused ? 'home' : 'home';
             } else if (route.name === 'PriceScreen') {
-              iconName = focused ? 'payments' : 'payments';
+              iconName = focused ? 'tags' : 'tags';
             } else if (route.name === 'ShopScreen') {
-              iconName = focused ? 'shopping_cart' : 'shopping_cart';
+              iconName = focused ? 'shopping-cart' : 'shopping-cart';
             } else if (route.name === 'ProfileScreen') {
-              iconName = focused ? 'manage_accounts' : 'manage_accounts';
+              iconName = focused ? 'user-circle-o' : 'user-circle-o';
             }
             if (iconName) {
               return (
@@ -47,6 +46,10 @@ export class BottomTabBarNav extends Component {
           initialParams={{userName: userName}}
           options={{
             tabBarLabel: 'Home',
+            // tabBarLabelStyle: {
+            //   fontSize: 11,
+            //   top: 0,
+            // },
             title: '',
             headerShown: false,
             tabBarActiveTintColor: 'black',

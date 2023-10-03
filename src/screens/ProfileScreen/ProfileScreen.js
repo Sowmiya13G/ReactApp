@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 import {styles} from './styles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../../components/Buttons/CustomButton';
 import {fetchUserData} from '../../asyncService/fetchUserDetails';
 class ProfileScreen extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       userDetails: null,
     };
@@ -24,6 +22,7 @@ class ProfileScreen extends Component {
       .then(userDetails => {
         if (userDetails) {
           this.setState({userDetails});
+          console.log(userDetails);
         } else {
           console.error('User not found');
         }
@@ -47,8 +46,6 @@ class ProfileScreen extends Component {
             <Text style={styles.text}>
               Mobile Number: {userDetails.mobileNumber}
             </Text>
-            <Text style={styles.text}>First Name: {userDetails.firstName}</Text>
-            <Text style={styles.text}>Last Name: {userDetails.lastName}</Text>
             <Text style={styles.text}>
               Designation: {userDetails.designation}
             </Text>

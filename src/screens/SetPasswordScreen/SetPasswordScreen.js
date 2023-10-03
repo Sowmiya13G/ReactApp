@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import {Text, View, Image, TextInput, SafeAreaView} from 'react-native';
 import {styles} from './styles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-// import screen components in navigation container
 import CustomButton from '../../components/Buttons/CustomButton';
 import BottomDesign from '../../components/BottomDesign/BottomDesign';
 import {handlePasswordUpdate} from '../../asyncService/handlePasswordUpdate';
-import {validateNewPassword} from '../../utils/Validaion';
+import {validateNewPassword} from '../../utils/Validation';
 class SetPasswordScreen extends Component {
   constructor(props) {
     super(props);

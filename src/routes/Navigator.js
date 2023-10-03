@@ -1,19 +1,23 @@
+import 'react-native-reanimated';
+import 'react-native-gesture-handler';
+
 import React, {Component} from 'react';
-import {linking} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {messageService} from '../services/firebase';
+
+import {checkAuthentication} from '../asyncService/authentication';
+
 import WelcomeScreen from '../screens/WelcomeScreen/WelcomeScreen';
 import LogInScreen from '../screens/LogInScreen/LogInScreen';
 import SignUpScreen from '../screens/SignUpScreen/SignUpScreen';
 import DetailsScreen from '../screens/DetailsScreen/DetailsScreen';
 import SetPasswordScreen from '../screens/SetPasswordScreen/SetPasswordScreen';
 import DrawerNav from './DrawerNav';
-import {handleDeepLink} from '../utils/deepLinking';
-import {checkAuthentication} from '../asyncService/authentication';
-const Stack = createStackNavigator();
+import {requestUserPermission} from '../firebase/pushNotification';
+import {setupFCMListeners} from '../utils/pushnotification_helper';
 
-class Navigator extends Component {
+const Stack = createStackNavigator();
+export default class Navigator extends Component {
   constructor(props) {
     super(props);
 
@@ -26,15 +30,14 @@ class Navigator extends Component {
   async componentDidMount() {
     // Check if the user is authenticated
     const {authenticated, userName} = await checkAuthentication();
-
     this.setState({
       authenticated,
       userName,
       checkedAuthentication: true,
     });
-    messageService();
-    // Listen for deep link events
-    Linking.addEventListener('url', handleDeepLink);
+    // messaging();
+    requestUserPermission();
+    setupFCMListeners();
   }
 
   render() {
@@ -44,7 +47,7 @@ class Navigator extends Component {
     }
 
     return (
-      <NavigationContainer linking={linking}>
+      <NavigationContainer>
         <Stack.Navigator
           initialRouteName={authenticated ? 'HomeScreen' : 'WelcomeScreen'}>
           <Stack.Screen
@@ -90,7 +93,10 @@ class Navigator extends Component {
           <Stack.Screen
             name="HomeScreen"
             component={DrawerNav}
-            initialParams={{userName: this.state.userName}}
+            initialParams={{
+              userName: this.state.userName,
+              userDetails: this.state.userDetails,
+            }}
             options={{
               title: '',
               headerShown: false,
@@ -101,4 +107,3 @@ class Navigator extends Component {
     );
   }
 }
-export default Navigator;

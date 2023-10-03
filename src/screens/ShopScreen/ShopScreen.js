@@ -26,7 +26,7 @@ export class ShopScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.heading}>TODO LIST</Text>
+        <Text style={styles.heading}>WISH LIST</Text>
         <ScrollView style={styles.scrollView}>
           {this.state.tasks.map((task, index) => {
             return (

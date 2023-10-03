@@ -2,8 +2,10 @@ const userNameRegex = /^[a-zA-Z0-9]*$/;
 const mobileNumberRegex = /^[0-9]+$/;
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 let isValid = true;
 const errors = {};
+
 export const validateEmail = email => {
   if (!email.toLowerCase().includes('@gmail.com')) {
     return 'Email should contain @gmail.com';

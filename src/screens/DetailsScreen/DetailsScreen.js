@@ -6,10 +6,8 @@ import {
   View,
   TextInput,
   ScrollView,
-  Alert,
 } from 'react-native';
 import {styles} from './styles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../../components/Buttons/CustomButton';
 import BottomDesign from '../../components/BottomDesign/BottomDesign';
 import {fetchUserDetails} from '../../asyncService/fetchUserDetails';
@@ -152,6 +150,7 @@ class DetailsScreen extends Component {
 }
 
 export default DetailsScreen;
+
 // handleSaveDetails = async () => {
 //   const {userName} = this.props.route.params;
 //   const {newDetails, designation, company, address, location} = this.state;

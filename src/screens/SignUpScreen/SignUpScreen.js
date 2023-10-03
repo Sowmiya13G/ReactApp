@@ -16,9 +16,9 @@ import {
   validateMobileNumber,
   validatePassword,
   validatePasswordMatch,
-} from '../../utils/Validaion';
+} from '../../utils/Validation';
 import {saveUserDetails} from '../../asyncService/SaveUserDetails';
-class SignUpScreen extends Component {
+export default class SignUpScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,8 +48,8 @@ class SignUpScreen extends Component {
       password: validatePassword(password),
       confirmPassword: validatePasswordMatch(password, confirmPassword),
     };
-    this.setState({errors}); // Set the errors state
-    return Object.values(errors).every(error => error === ''); // Check if there are any errors
+    this.setState({errors});
+    return Object.values(errors).every(error => error === '');
   };
 
   handleSignUp = async () => {
@@ -92,6 +92,7 @@ class SignUpScreen extends Component {
           email,
           mobileNumber,
         });
+        console.log('Saved user details:', userData);
       }
     } catch (error) {
       console.error('Error saving user details:', error);
@@ -187,5 +188,3 @@ class SignUpScreen extends Component {
     );
   }
 }
-
-export default SignUpScreen;

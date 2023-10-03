@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {styles} from './styles';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../../components/Buttons/CustomButton';
 import BottomDesign from '../../components/BottomDesign/BottomDesign';
 import {authentication} from '../../asyncService/authentication';
-class LogInScreen extends Component {
+export default class LogInScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -79,15 +79,13 @@ class LogInScreen extends Component {
                 placeholderTextColor="grey"
                 value={password}
                 onChangeText={text => this.setState({password: text})}
-                secureTextEntry={this.state.showPassword}
+                secureTextEntry={!this.state.showPassword}
               />
               <TouchableOpacity
                 style={styles.icon}
                 onPress={this.handlePasswordVisibility}>
                 <Icon
-                  name={
-                    this.state.showPassword ? 'visibility' : 'visibility_off'
-                  }
+                  name={this.state.showPassword ? 'eye' : 'eye-slash'}
                   size={20}
                   color="grey"
                 />
@@ -119,5 +117,3 @@ class LogInScreen extends Component {
     );
   }
 }
-
-export default LogInScreen;

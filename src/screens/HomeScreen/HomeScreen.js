@@ -7,8 +7,8 @@ import {
   renderTopList,
   renderBottomList,
 } from '../../components/Modal/ProductModal/ProductModal';
-import {trackAddToCart} from '../../services/firebase';
-import {openAmazonWebsite} from '../../services/linking';
+import {trackAddToCart} from '../../firebase/analytics';
+import {openAmazonWebsite} from '../../utils/linking';
 class HomeScreen extends Component {
   constructor(props) {
     super(props);

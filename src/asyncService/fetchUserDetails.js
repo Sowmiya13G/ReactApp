@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+// DetailsScreen
 export const fetchUserDetails = async (userName, setStateCallback) => {
   try {
     const userDataJSON = await AsyncStorage.getItem('userData');
@@ -16,7 +16,7 @@ export const fetchUserDetails = async (userName, setStateCallback) => {
     console.error('Error fetching user details:', error);
   }
 };
-
+// Profile Screen
 export const fetchUserData = async userName => {
   try {
     const userDataJSON = await AsyncStorage.getItem('userData');
