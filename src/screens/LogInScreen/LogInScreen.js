@@ -18,6 +18,7 @@ export default class LogInScreen extends Component {
     this.state = {
       userName: '',
       password: '',
+      error: '',
       showPassword: false,
     };
   }
@@ -37,10 +38,14 @@ export default class LogInScreen extends Component {
   };
   handleLogin = async () => {
     const {userName, password} = this.state;
-
+    if (!userName || !password) {
+      this.setState({error: 'Please enter both username and password.'});
+      return;
+    }
     const {success, user, error} = await authentication(userName, password);
 
     if (success) {
+      this.setState({userName: '', password: '', error: ''});
       this.props.navigation.navigate('HomeScreen', {
         userName: user.userName,
       });
@@ -51,7 +56,7 @@ export default class LogInScreen extends Component {
   };
 
   render() {
-    const {userName, password} = this.state;
+    const {userName, password, error} = this.state;
     return (
       <SafeAreaView>
         <View style={styles.container}>
@@ -91,6 +96,7 @@ export default class LogInScreen extends Component {
                 />
               </TouchableOpacity>
             </View>
+            {error ? <Text style={styles.error}>{error}</Text> : null}
           </View>
           <TouchableOpacity style={styles.forgot}>
             <Text style={styles.forgotText} onPress={this.newPassword}>

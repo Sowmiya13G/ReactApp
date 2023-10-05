@@ -14,7 +14,7 @@ import DetailsScreen from '../screens/DetailsScreen/DetailsScreen';
 import SetPasswordScreen from '../screens/SetPasswordScreen/SetPasswordScreen';
 import DrawerNav from './DrawerNav';
 import {requestUserPermission} from '../firebase/pushNotification';
-import {setupFCMListeners} from '../utils/pushnotification_helper';
+import {setupFCMListener} from '../utils/pushnotification_helper';
 
 const Stack = createStackNavigator();
 export default class Navigator extends Component {
@@ -37,7 +37,7 @@ export default class Navigator extends Component {
     });
     // messaging();
     requestUserPermission();
-    setupFCMListeners();
+    setupFCMListener();
   }
 
   render() {
