@@ -13,9 +13,10 @@ import SignUpScreen from '../screens/SignUpScreen/SignUpScreen';
 import DetailsScreen from '../screens/DetailsScreen/DetailsScreen';
 import SetPasswordScreen from '../screens/SetPasswordScreen/SetPasswordScreen';
 import DrawerNav from './DrawerNav';
+import messaging from '../firebase/messaging';
 import {requestUserPermission} from '../firebase/pushNotification';
+import LoadingComponent from '../components/LoadingComponent';
 import {setupFCMListener} from '../utils/pushnotification_helper';
-
 const Stack = createStackNavigator();
 export default class Navigator extends Component {
   constructor(props) {
@@ -28,22 +29,21 @@ export default class Navigator extends Component {
     };
   }
   async componentDidMount() {
-    // Check if the user is authenticated
-    const {authenticated, userName} = await checkAuthentication();
+    const authData = await checkAuthentication();
     this.setState({
-      authenticated,
-      userName,
+      authenticated: authData.authenticated,
+      userName: authData.userName,
       checkedAuthentication: true,
     });
-    // messaging();
+    messaging();
     requestUserPermission();
-    setupFCMListener();
+    setupFCMListener(this.props.navigation);
   }
 
   render() {
     const {authenticated, checkedAuthentication} = this.state;
     if (!checkedAuthentication) {
-      return null;
+      return <LoadingComponent />;
     }
 
     return (

@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import crashlytics from '@react-native-firebase/crashlytics';
+
 export const checkAuthentication = async () => {
   try {
     const userDataJSON = await AsyncStorage.getItem('userData');
-
+    console.log('userDataJSON:', userDataJSON);
     if (userDataJSON) {
       const userDataArray = JSON.parse(userDataJSON);
       console.log('userDataArray', userDataArray);

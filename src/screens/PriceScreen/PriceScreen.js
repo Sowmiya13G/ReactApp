@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
-import {styles} from './styles';
+import {Provider} from 'react-redux';
+import store from '../../redux/store/store';
+import NewsList from '../../components/NewsData/NewsList';
 export class PriceScreen extends Component {
   render() {
     return (
-      <View>
-        <Text style={styles.text}>PRICE SCREEN</Text>
-      </View>
+      <Provider store={store}>
+        <NewsList />
+      </Provider>
     );
   }
 }
