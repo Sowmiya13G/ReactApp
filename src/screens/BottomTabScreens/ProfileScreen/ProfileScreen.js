@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 import {styles} from './styles';
-import CustomButton from '../../components/Buttons/CustomButton';
-import {fetchUserData} from '../../asyncService/fetchUserDetails';
+import CustomButton from '../../../components/Buttons/CustomButton';
+import {fetchUserData} from '../../../asyncService/fetchUserDetails';
 class ProfileScreen extends Component {
   constructor(props) {
     super(props);

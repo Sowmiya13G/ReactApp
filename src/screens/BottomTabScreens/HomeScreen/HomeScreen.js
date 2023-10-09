@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
 import {FlatList, View, TouchableOpacity, Text} from 'react-native';
 import {styles} from './styles';
-import {fetchProductsUsingFetch, fetchProductsUsingAxios} from '../../api/api';
-import ProductDetailsModal from '../../components/Modal/ProductDetails/ProductDetails';
+import {
+  fetchProductsUsingFetch,
+  fetchProductsUsingAxios,
+} from '../../../api/api';
+import ProductDetailsModal from '../../../components/Modal/ProductDetails/ProductDetails';
 import {
   renderTopList,
   renderBottomList,
-} from '../../components/Modal/ProductModal/ProductModal';
-import {trackAddToCart} from '../../firebase/analytics';
-import {openAmazonWebsite} from '../../utils/linking';
+} from '../../../components/Modal/ProductModal/ProductModal';
+import {trackAddToCart} from '../../../firebase/analytics';
+import {openAmazonWebsite} from '../../../utils/linking';
 class HomeScreen extends Component {
   constructor(props) {
     super(props);

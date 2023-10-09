@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import CustomButton from '../../components/Buttons/CustomButton';
-import BottomDesign from '../../components/BottomDesign/BottomDesign';
-import {authentication} from '../../asyncService/authentication';
+import CustomButton from '../../../components/Buttons/CustomButton';
+import BottomDesign from '../../../components/BottomDesign/BottomDesign';
+import {authentication} from '../../../asyncService/authentication';
 export default class LogInScreen extends Component {
   constructor(props) {
     super(props);
@@ -62,7 +62,7 @@ export default class LogInScreen extends Component {
         <View style={styles.container}>
           <View style={styles.head}>
             <Image
-              source={require('../../assets/images/login.jpg')}
+              source={require('../../../assets/images/login.jpg')}
               style={styles.logo}
             />
             <Text style={styles.logIn}>LOG IN</Text>

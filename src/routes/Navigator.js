@@ -7,11 +7,11 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import {checkAuthentication} from '../asyncService/authentication';
 
-import WelcomeScreen from '../screens/WelcomeScreen/WelcomeScreen';
-import LogInScreen from '../screens/LogInScreen/LogInScreen';
-import SignUpScreen from '../screens/SignUpScreen/SignUpScreen';
-import DetailsScreen from '../screens/DetailsScreen/DetailsScreen';
-import SetPasswordScreen from '../screens/SetPasswordScreen/SetPasswordScreen';
+import WelcomeScreen from '../screens/OnBoardingScreens/WelcomeScreen/WelcomeScreen';
+import LogInScreen from '../screens/OnBoardingScreens/LogInScreen/LogInScreen';
+import SignUpScreen from '../screens/OnBoardingScreens/SignUpScreen/SignUpScreen';
+import DetailsScreen from '../screens/OnBoardingScreens/DetailsScreen/DetailsScreen';
+import SetPasswordScreen from '../screens/OnBoardingScreens/SetPasswordScreen/SetPasswordScreen';
 import DrawerNav from './DrawerNav';
 import messaging from '../firebase/messaging';
 import {requestUserPermission} from '../firebase/pushNotification';

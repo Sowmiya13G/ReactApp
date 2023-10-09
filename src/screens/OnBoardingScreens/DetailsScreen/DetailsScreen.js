@@ -8,10 +8,10 @@ import {
   ScrollView,
 } from 'react-native';
 import {styles} from './styles';
-import CustomButton from '../../components/Buttons/CustomButton';
-import BottomDesign from '../../components/BottomDesign/BottomDesign';
-import {fetchUserDetails} from '../../asyncService/fetchUserDetails';
-import {handleSaveDetails} from '../../asyncService/SaveUserDetails';
+import CustomButton from '../../../components/Buttons/CustomButton';
+import BottomDesign from '../../../components/BottomDesign/BottomDesign';
+import {fetchUserDetails} from '../../../asyncService/fetchUserDetails';
+import {handleSaveDetails} from '../../../asyncService/SaveUserDetails';
 class DetailsScreen extends Component {
   constructor(props) {
     super(props);
@@ -128,7 +128,7 @@ class DetailsScreen extends Component {
                 />
                 <Image
                   style={styles.icon}
-                  source={require('../../assets/images/location.png')}
+                  source={require('../../../assets/images/location.png')}
                 />
               </View>
               <View style={styles.btnView}>

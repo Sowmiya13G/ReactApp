@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Keyboard, ScrollView, Text, View} from 'react-native';
 import {styles} from './styles';
-import ToDoInput from '../../components/ToDoList/ToDoInput';
-import ToDoItem from '../../components/ToDoList/ToDoItem';
+import ToDoInput from '../../../components/ToDoList/ToDoInput';
+import ToDoItem from '../../../components/ToDoList/ToDoItem';
 export class ShopScreen extends Component {
   constructor(props) {
     super(props);

@@ -8,16 +8,16 @@ import {
   ScrollView,
 } from 'react-native';
 import {styles} from './styles';
-import CustomButton from '../../components/Buttons/CustomButton';
-import BottomDesign from '../../components/BottomDesign/BottomDesign';
+import CustomButton from '../../../components/Buttons/CustomButton';
+import BottomDesign from '../../../components/BottomDesign/BottomDesign';
 import {
   validateEmail,
   validateUserName,
   validateMobileNumber,
   validatePassword,
   validatePasswordMatch,
-} from '../../utils/Validation';
-import {saveUserDetails} from '../../asyncService/SaveUserDetails';
+} from '../../../utils/Validation';
+import {saveUserDetails} from '../../../asyncService/SaveUserDetails';
 export default class SignUpScreen extends Component {
   constructor(props) {
     super(props);
@@ -108,7 +108,7 @@ export default class SignUpScreen extends Component {
           <View style={styles.container}>
             <View style={styles.head}>
               <Image
-                source={require('../../assets/images/signup.jpg')}
+                source={require('../../../assets/images/signup.jpg')}
                 style={styles.logo}
               />
               <Text style={styles.header}>SIGN UP</Text>

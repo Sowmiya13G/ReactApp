@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {Image, Text, View} from 'react-native';
 import {createDrawerNavigator, DrawerItemList} from '@react-navigation/drawer';
 
-import Bills from '../screens/drawer/Bills';
-import Notification from '../screens/drawer/Notification';
-import FindStore from '../screens/drawer/FindStore';
-import Settings from '../screens/drawer/Settings';
-import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
+import Bills from '../screens/DrawerNavScreens/Bills';
+import Notification from '../screens/DrawerNavScreens/Notification';
+import FindStore from '../screens/DrawerNavScreens/FindStore';
+import Settings from '../screens/DrawerNavScreens/Settings';
+import ProfileScreen from '../screens/BottomTabScreens/ProfileScreen/ProfileScreen';
 import BottomTabBarNav from './BottomTabBarNav';
 
 const Drawer = createDrawerNavigator();
@@ -41,62 +41,47 @@ class DrawerNav extends Component {
           <CustomDrawerContent userName={userName} {...props} />
         )}
         screenOptions={{
-          drawerStyle: {
-            backgroundColor: '#ffeb66',
-          },
-          drawerLabelStyle: {
-            fontSize: 18,
-          },
+          drawerStyle: {backgroundColor: '#ffeb66'},
+          drawerLabelStyle: {fontSize: 18},
           activeTintColor: 'black',
           inactiveTintColor: 'gray',
+          title: '',
         }}>
         <Drawer.Screen
           name="Home"
           component={BottomTabBarNav}
           initialParams={{userName: userName}}
-          options={{
-            title: 'ReactApp',
-          }}
+          options={{title: 'ReactApp'}}
         />
         <Drawer.Screen
           name="Bills"
           component={Bills}
           initialParams={{userName: userName}}
-          options={{
-            title: 'Bills',
-          }}
+          options={{title: 'Bills'}}
         />
         <Drawer.Screen
           name="Notification"
           component={Notification}
           initialParams={{userName: userName}}
-          options={{
-            title: 'Notification',
-          }}
+          options={{title: 'Notification'}}
         />
         <Drawer.Screen
           name="FindStore"
           component={FindStore}
           initialParams={{userName: userName}}
-          options={{
-            title: 'FindStore',
-          }}
+          options={{title: 'FindStore'}}
         />
         <Drawer.Screen
           name="ProfileScreen"
           component={ProfileScreen}
           initialParams={{userName: userName}}
-          options={{
-            title: 'ProfileScreen',
-          }}
+          options={{title: 'ProfileScreen'}}
         />
         <Drawer.Screen
           name="Settings"
           component={Settings}
           initialParams={{userName: userName}}
-          options={{
-            title: 'Settings',
-          }}
+          options={{title: 'Settings'}}
         />
       </Drawer.Navigator>
     );
@@ -104,28 +89,3 @@ class DrawerNav extends Component {
 }
 
 export default DrawerNav;
-
-// class HomeScreen extends Component {
-//   render() {
-//     const {navigation} = this.props;
-//     return (
-//       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-//         <Button
-//           onPress={() => navigation.navigate('Notifications')}
-//           title="Go to notifications"
-//         />
-//       </View>
-//     );
-//   }
-// }
-
-// class NotificationsScreen extends Component {
-//   render() {
-//     const {navigation} = this.props;
-//     return (
-//       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-//         <Button onPress={() => navigation.goBack()} title="Go back home" />
-//       </View>
-//     );
-//   }
-// }

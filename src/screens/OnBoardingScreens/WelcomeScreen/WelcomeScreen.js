@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {View, Image} from 'react-native';
 import {styles} from './styles';
-import {onDisplayNotification} from '../../utils/notifee';
-import CustomButton from '../../components/Buttons/CustomButton';
-import BottomDesign from '../../components/BottomDesign/BottomDesign';
+import {onDisplayNotification} from '../../../utils/notifee';
+import CustomButton from '../../../components/Buttons/CustomButton';
+import BottomDesign from '../../../components/BottomDesign/BottomDesign';
 
 class WelcomeScreen extends Component {
   goToSignUp = () => {
@@ -21,7 +21,7 @@ class WelcomeScreen extends Component {
     return (
       <View style={styles.container}>
         <Image
-          source={require('../../assets/images/welcome.jpg')}
+          source={require('../../../assets/images/welcome.jpg')}
           style={styles.logo}
         />
         <View style={styles.buttonView}>

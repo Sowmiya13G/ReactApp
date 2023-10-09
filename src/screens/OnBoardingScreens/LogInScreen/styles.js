@@ -50,14 +50,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   icon: {
-    height: 20,
-    width: 20,
-    marginRight: 40,
-    right: '0%',
-    position: 'absolute',
-    marginVertical: 13,
-    marginTop: 4,
-    // marginBottom: 5,
+    alignItems: 'flex-end',
+    right: 30,
+    top: 9,
   },
   forgot: {
     alignItems: 'flex-end',

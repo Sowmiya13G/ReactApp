@@ -7,7 +7,7 @@ export const checkAuthentication = async () => {
     console.log('userDataJSON:', userDataJSON);
     if (userDataJSON) {
       const userDataArray = JSON.parse(userDataJSON);
-      console.log('userDataArray', userDataArray);
+      console.log('parsed userDataArray', userDataArray);
 
       const authenticatedUserJSON = await AsyncStorage.getItem(
         'authenticatedUser',

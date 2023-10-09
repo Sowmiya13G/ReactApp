@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Text, View, Image, TextInput, SafeAreaView} from 'react-native';
 import {styles} from './styles';
-import CustomButton from '../../components/Buttons/CustomButton';
-import BottomDesign from '../../components/BottomDesign/BottomDesign';
-import {handlePasswordUpdate} from '../../asyncService/handlePasswordUpdate';
-import {validateNewPassword} from '../../utils/Validation';
+import CustomButton from '../../../components/Buttons/CustomButton';
+import BottomDesign from '../../../components/BottomDesign/BottomDesign';
+import {handlePasswordUpdate} from '../../../asyncService/handlePasswordUpdate';
+import {validateNewPassword} from '../../../utils/Validation';
 class SetPasswordScreen extends Component {
   constructor(props) {
     super(props);
@@ -57,7 +57,7 @@ class SetPasswordScreen extends Component {
         <View style={styles.container}>
           <View style={styles.head}>
             <Image
-              source={require('../../assets/images/password.jpg')}
+              source={require('../../../assets/images/password.jpg')}
               style={styles.logo}
             />
             <Text style={styles.header}>SET NEW PASSWORD</Text>
