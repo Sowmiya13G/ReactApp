@@ -23,28 +23,28 @@ export const getFCMToken = async () => {
   }
 };
 
-export const setupFCMListener = async () => {
-  messaging().onNotificationOpenedApp(remoteMessage => {
-    console.log(
-      'Notification caused app to open from background state:',
-      remoteMessage.notification,
-    );
-    this.props.navigation.navigate(remoteMessage.data.type);
-  });
+// export const setupFCMListener = async () => {
+//   messaging().onNotificationOpenedApp(remoteMessage => {
+//     console.log(
+//       'Notification caused app to open from background state:',
+//       remoteMessage.notification,
+//     );
+//     this.props.navigation.navigate(remoteMessage.data.type);
+//   });
 
-  // Check whether an initial notification is available
-  messaging()
-    .getInitialNotification()
-    .then(remoteMessage => {
-      if (remoteMessage) {
-        console.log(
-          'Notification caused app to open from quit state:',
-          remoteMessage.notification,
-        );
-      }
-    });
+//   // Check whether an initial notification is available
+//   messaging()
+//     .getInitialNotification()
+//     .then(remoteMessage => {
+//       if (remoteMessage) {
+//         console.log(
+//           'Notification caused app to open from quit state:',
+//           remoteMessage.notification,
+//         );
+//       }
+//     });
 
-  messaging().onMessage(async remoteMessage =>
-    console.log('Notification foreground state', remoteMessage),
-  );
-};
+//   messaging().onMessage(async remoteMessage =>
+//     console.log('Notification foreground state', remoteMessage),
+//   );
+// };

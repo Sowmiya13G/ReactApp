@@ -1,4 +1,4 @@
-import 'react-native-reanimated';
+import {valuePacker} from 'react-native-reanimated';
 import 'react-native-gesture-handler';
 
 import React, {Component} from 'react';
@@ -15,7 +15,6 @@ import SetPasswordScreen from '../screens/OnBoardingScreens/SetPasswordScreen/Se
 import DrawerNav from './DrawerNav';
 import messaging from '../firebase/messaging';
 import {requestUserPermission} from '../firebase/pushNotification';
-import LoadingComponent from '../components/LoadingComponent';
 import {setupFCMListener} from '../utils/pushnotification_helper';
 const Stack = createStackNavigator();
 export default class Navigator extends Component {
@@ -43,7 +42,7 @@ export default class Navigator extends Component {
   render() {
     const {authenticated, checkedAuthentication} = this.state;
     if (!checkedAuthentication) {
-      return <LoadingComponent />;
+      return null;
     }
 
     return (

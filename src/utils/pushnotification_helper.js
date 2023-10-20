@@ -2,13 +2,17 @@ import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
 
 export const setupFCMListener = async navigation => {
+  const channelId = await notifee.createChannel({
+    id: 'default',
+    name: 'Default Channel',
+  });
   messaging().onNotificationOpenedApp(async remoteMessage => {
     console.log(
       'NOTIFICATION CAUSED APP TO OPEN FROM BACKGROUND STATE:',
       remoteMessage.notification,
     );
     navigation.navigate(remoteMessage.data.type);
-    await notifee.cancelNotification(remoteMessage.notification.id);
+    await notifee.cancelNotification(String(remoteMessage.notification.id));
   });
 
   // Check whether an initial notification is available
@@ -20,18 +24,33 @@ export const setupFCMListener = async navigation => {
           'NOTIFICATION CAUSED APP TO OPEN FROM QUITE STATE:',
           remoteMessage.notification,
         );
-        await notifee.cancelNotification(remoteMessage.notification.id);
+
+        await notifee.cancelNotification(String(remoteMessage.notification.id));
       }
     });
-
   messaging().onMessage(async remoteMessage => {
-    console.log('NOTIFICATION FOREGROUND STATE', remoteMessage);
-    const notification = new notifee.Notification({
-      title: remoteMessage.notification.title,
-      body: remoteMessage.notification.body,
+    console.log('NOTIFICATION IN FOREGROUND STATE', remoteMessage);
+    const {title, body} = remoteMessage.notification;
+    await notifee.displayNotification({
+      title,
+      body,
+      android: {
+        channelId,
+        smallIcon: 'ic_launcher',
+        pressAction: {
+          id: 'default',
+        },
+      },
     });
-    await notifee.displayNotification(notification); // Display the notification.
   });
+  // messaging().onMessage(async remoteMessage => {
+  //   console.log('NOTIFICATION FOREGROUND STATE', remoteMessage);
+  //   const notification = new notifee.Notification({
+  //     title: remoteMessage.notification.title,
+  //     body: remoteMessage.notification.body,
+  //   });
+  //   await notifee.displayNotification(notification);
+  // });
 
   notifee.onBackgroundEvent(async ({type, detail}) => {
     if (type === notifee.BackgroundEventType.PRESS) {
