@@ -9,7 +9,7 @@ export const renderTopList = ({item, showProductDetails, trackAddToCart}) => (
       <Text style={styles.topTitle}>{item.title}</Text>
       <Text style={styles.topPrice}>${item.price}</Text>
       <TouchableOpacity
-        onPress={() => trackAddToCart(item)} // Add an item to cart on press
+        onPress={() => trackAddToCart(item)}
         style={styles.addToCartButton}>
         <Text style={styles.addToCartButtonText}>Add to Cart</Text>
       </TouchableOpacity>

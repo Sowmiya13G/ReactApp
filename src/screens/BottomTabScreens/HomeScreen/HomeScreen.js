@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {FlatList, View, TouchableOpacity, Text} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {styles} from './styles';
 import {
   fetchProductsUsingFetch,
@@ -23,6 +25,8 @@ class HomeScreen extends Component {
       bottomList: [],
       selectedProduct: null,
       isModalVisible: false,
+      cart: [],
+      cartCount: 0,
     };
   }
   componentDidMount() {
@@ -49,6 +53,7 @@ class HomeScreen extends Component {
       .catch(error => {
         console.error('Error fetching data', error);
       });
+    this.loadCartData();
   }
   showProductDetails = product => {
     this.setState({
@@ -63,10 +68,40 @@ class HomeScreen extends Component {
       isModalVisible: false,
     });
   };
-  onAddToCart = product => {
-    console.log('Product added to cart:', product);
+
+  goToBills = () => {
+    console.log('Cart in HomeScreen:', this.state.cart);
+    this.props.navigation.navigate('Bills', {cart: this.state.cart});
   };
-  // Function to show the notification using the NotificationService class
+
+  onAddToCart = async product => {
+    this.setState(prevState => ({
+      cart: [...prevState.cart, product],
+      cartCount: prevState.cartCount + 1,
+    }));
+
+    // Store the cart data in AsyncStorage
+    try {
+      const cart = await AsyncStorage.getItem('cart');
+      let cartArray = JSON.parse(cart) || [];
+      cartArray.push(product);
+      await AsyncStorage.setItem('cart', JSON.stringify(cartArray));
+      console.log('Product added to cart:', product);
+    } catch (error) {
+      console.error('Error storing product in cart:', error);
+    }
+  };
+  // Load cart data from AsyncStorage
+  loadCartData = async () => {
+    try {
+      const cart = await AsyncStorage.getItem('cart');
+      const cartArray = JSON.parse(cart) || [];
+      this.setState({cart: cartArray, cartCount: cartArray.length});
+    } catch (error) {
+      console.error('Error loading cart data:', error);
+    }
+  };
+
   showViewMoreNotificationHandler = () => {
     NotificationService.showViewMoreNotification();
   };
@@ -75,7 +110,7 @@ class HomeScreen extends Component {
     const {route} = this.props;
     const {userName} = route.params;
     const {userDetails} = this.state;
-    const {topList, bottomList} = this.state;
+    const {topList, bottomList, cart} = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -83,7 +118,24 @@ class HomeScreen extends Component {
           <Text style={styles.text}>{userName ? userName : 'hi'}</Text>
         </View>
         <View style={styles.apiContainer}>
-          <Text style={styles.sectionTitle}>Top List (Fetch method)</Text>
+          <View style={styles.listTitleContainer}>
+            <Text style={styles.sectionTitle}>Top Products</Text>
+            <TouchableOpacity onPress={this.goToBills}>
+              <View style={styles.cartContainer}>
+                <Icon
+                  name="shopping-cart"
+                  size={25}
+                  color="#000"
+                  style={styles.cartIcon}
+                />
+                {this.state.cartCount > 0 && (
+                  <Text style={styles.cartCountText}>
+                    {this.state.cartCount}
+                  </Text>
+                )}
+              </View>
+            </TouchableOpacity>
+          </View>
           <View style={styles.topList}>
             <FlatList
               data={topList}
@@ -92,14 +144,15 @@ class HomeScreen extends Component {
                   ...item,
                   showProductDetails: this.showProductDetails,
                   trackAddToCart: trackAddToCart,
+                  onAddToCart: this.onAddToCart,
                 })
               }
               keyExtractor={item => item.id.toString()}
               horizontal={true}
             />
           </View>
-          <View style={styles.bottomListTitleContainer}>
-            <Text style={styles.sectionTitle}>Bottom List (Axios method)</Text>
+          <View style={styles.listTitleContainer}>
+            <Text style={styles.sectionTitle}>Trending Offers</Text>
             <TouchableOpacity onPress={() => openAmazonWebsite()}>
               <Text style={styles.viewMoreButtonText}>View More</Text>
             </TouchableOpacity>

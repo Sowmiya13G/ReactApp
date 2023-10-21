@@ -1,5 +1,15 @@
 import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const storeNotification = async () => {
+  const storedNotifications = await AsyncStorage.getItem('notifications');
+  let notifications = storedNotifications
+    ? JSON.parse(storedNotifications)
+    : [];
+  notifications.push(remoteMessage);
+  await AsyncStorage.setItem('notifications', JSON.stringify(notifications));
+};
 
 export const setupFCMListener = async navigation => {
   const channelId = await notifee.createChannel({
@@ -29,6 +39,7 @@ export const setupFCMListener = async navigation => {
       }
     });
   messaging().onMessage(async remoteMessage => {
+    storeNotification();
     console.log('NOTIFICATION IN FOREGROUND STATE', remoteMessage);
     const {title, body} = remoteMessage.notification;
     await notifee.displayNotification({

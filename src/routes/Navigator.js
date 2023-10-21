@@ -4,9 +4,7 @@ import 'react-native-gesture-handler';
 import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-
 import {checkAuthentication} from '../asyncService/authentication';
-
 import WelcomeScreen from '../screens/OnBoardingScreens/WelcomeScreen/WelcomeScreen';
 import LogInScreen from '../screens/OnBoardingScreens/LogInScreen/LogInScreen';
 import SignUpScreen from '../screens/OnBoardingScreens/SignUpScreen/SignUpScreen';
@@ -47,8 +45,7 @@ export default class Navigator extends Component {
 
     return (
       <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName={authenticated ? 'HomeScreen' : 'WelcomeScreen'}>
+        <Stack.Navigator initialRouteName={'HomeScreen'}>
           <Stack.Screen
             name="WelcomeScreen"
             component={WelcomeScreen}

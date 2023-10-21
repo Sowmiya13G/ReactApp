@@ -24,11 +24,11 @@ export const styles = StyleSheet.create({
   apiContainer: {
     flex: 1,
     marginTop: 30,
-    padding: 20,
+    padding: 10,
     left: 10,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
     color: '#000000',
@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 10,
   },
-  bottomListTitleContainer: {
+  listTitleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -52,7 +52,21 @@ export const styles = StyleSheet.create({
     fontSize: 15,
     marginTop: 10,
     right: 10,
-    // position: 'absolute',
+  },
+  cartIcon: {
+    marginTop: 2,
+    right: 30,
+  },
+  cartContainer: {
+    flexDirection: 'row',
+  },
+  cartCountText: {
+    position: 'absolute',
+    color: 'green',
+    fontWeight: 'bold',
+    marginTop: 0,
+    marginRight: 0,
+    fontSize: 15,
   },
   modalContainer: {
     flex: 1,
