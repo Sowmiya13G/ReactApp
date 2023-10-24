@@ -1,35 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import crashlytics from '@react-native-firebase/crashlytics';
 
-export const checkAuthentication = async () => {
-  try {
-    const userDataJSON = await AsyncStorage.getItem('userData');
-    console.log('userDataJSON:', userDataJSON);
-    if (userDataJSON) {
-      const userDataArray = JSON.parse(userDataJSON);
-      console.log('parsed userDataArray', userDataArray);
-
-      const authenticatedUserJSON = await AsyncStorage.getItem(
-        'authenticatedUser',
-      );
-      if (authenticatedUserJSON) {
-        const authenticatedUser = JSON.parse(authenticatedUserJSON);
-        console.log('authenticatedUser'.authenticatedUser);
-
-        return {
-          authenticated: true,
-          userName: authenticatedUser.userName,
-        };
-      }
-    }
-
-    return {authenticated: false};
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-    return {authenticated: false};
-  }
-};
-
 export const authentication = async (userName, password) => {
   try {
     const userDataJSON = await AsyncStorage.getItem('userData');
@@ -70,5 +41,32 @@ export const authentication = async (userName, password) => {
     crashlytics().recordError(error);
 
     return {success: false, error: 'Error fetching user data'};
+  }
+};
+
+export const checkAuthentication = async userName => {
+  try {
+    const userDataJSON = await AsyncStorage.getItem('userData');
+    if (userDataJSON) {
+      const userDataArray = JSON.parse(userDataJSON);
+      console.log('userDataArray:', userDataArray);
+      const usernames = userDataArray.map(user => user.userName);
+      console.log('usernames', usernames);
+      if (usernames) {
+        const currentUser = usernames.find(user => user.userName === userName);
+        console.log('current user', currentUser);
+        if (currentUser) {
+          return {
+            authenticated: true,
+            userName: currentUser.userName,
+          };
+        }
+      }
+    }
+
+    return {authenticated: false};
+  } catch (error) {
+    console.error('Error checking authentication:', error);
+    return {authenticated: false};
   }
 };
